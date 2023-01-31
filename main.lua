@@ -50,7 +50,7 @@ end
 function love.draw()
     push:start()
 
-    love.graphics.draw(BACHGROUND_IMAGE, 0, 0)
+    love.graphics.draw(BACKGROUND_IMAGE, 0, 0)
 
 
     push:finish()
