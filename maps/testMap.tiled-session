@@ -3,10 +3,21 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "test_map.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "test_map.tmx": {
+            "scale": 0.274609375,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 1655.0782361308677,
+                "y": 5471.408250355619
+            }
+        },
+        "test_map.tmx#testTile": {
+            "scaleInDock": 0.5
+        }
     },
     "last.exportedFilePath": "C:/Projects/pixie_game/Pixie/maps",
     "last.imagePath": "C:/Projects/pixie_game/Pixie/images/tiles",
@@ -16,9 +27,11 @@
     "map.tileHeight": 64,
     "map.tileWidth": 64,
     "openFiles": [
+        "test_map.tmx"
     ],
     "project": "testMap.tiled-project",
     "recentFiles": [
+        "test_map.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {

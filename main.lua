@@ -13,7 +13,6 @@ function love.load()
         resizable = true
     })
 
-
     player = Player()
 end
 
@@ -30,6 +29,5 @@ function love.draw()
     -- love.graphics.draw(BACKGROUND_IMAGE, 0, 0)
 
     player:render()
-
     push:finish()
 end
