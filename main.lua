@@ -1,9 +1,11 @@
 require 'src/dependencies'
 
-
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setTitle('Pixie')
+
+    sti = require 'libraries/sti'
+    gameMap = sti('maps/testMap.lua')
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         vsync = true,
@@ -49,8 +51,8 @@ end
 
 function love.draw()
     push:start()
-
-    love.graphics.draw(BACKGROUND_IMAGE, 0, 0)
+    gameMap:draw()
+    -- love.graphics.draw(BACKGROUND_IMAGE, 0, 0)
 
 
     push:finish()
