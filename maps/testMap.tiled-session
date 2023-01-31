@@ -3,16 +3,24 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "test_map.tmx",
+    "activeFile": "testMap.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "testMap.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 959.3333333333333,
+                "y": 959.3333333333333
+            }
+        },
         "test_map.tmx": {
             "scale": 0.274609375,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1655.0782361308677,
-                "y": 5471.408250355619
+                "x": 959.5448079658606,
+                "y": 959.5448079658604
             }
         },
         "test_map.tmx#testTile": {
@@ -27,11 +35,13 @@
     "map.tileHeight": 64,
     "map.tileWidth": 64,
     "openFiles": [
-        "test_map.tmx"
+        "test_map.tmx",
+        "testMap.tmx"
     ],
     "project": "testMap.tiled-project",
     "recentFiles": [
-        "test_map.tmx"
+        "test_map.tmx",
+        "testMap.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {

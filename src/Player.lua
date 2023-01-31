@@ -52,5 +52,5 @@ function Player:update(dt)
 end
 
 function Player:render()
-    self.anim:draw(player.spriteSheet, self.x, self.y, nil, 5)
+    self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
 end
