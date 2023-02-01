@@ -8,4 +8,5 @@ wf = require 'libraries/windfield'
 
 
 require 'src/Player'
+require 'src/LightManager'
 require 'src/Tree'
