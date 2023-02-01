@@ -4,6 +4,9 @@ function love.load()
     camera = require 'libraries/camera'
     cam = camera()
 
+    world = wf.newWorld(0, 0)
+    world:addCollisionClass('Tree')
+    world:addCollisionClass('Player')
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setTitle('Pixie')
 
@@ -17,10 +20,12 @@ function love.load()
     })
 
     player = Player()
+    tree = Tree(300, 100)
 end
 
 function love.update(dt)
     player:update(dt)
+    tree:update(dt)
     cam:lookAt(player.x, player.y)
 
     local w = love.graphics.getWidth()
@@ -54,6 +59,7 @@ function love.update(dt)
     love.mouse.buttonsPressed = {}
     
     img = love.graphics.newImage('images/characters/boy-charecter.png')
+    world:update(dt)
 end
 
 function love.draw()
@@ -63,9 +69,10 @@ function love.draw()
         gameMap:drawLayer(gameMap.layers['ground'])
         gameMap:drawLayer(gameMap.layers['trees'])
     -- love.graphics.draw(BACKGROUND_IMAGE, 0, 0)
+        tree:render()
         player:render()
 
-
+        world:draw()
         -- draw an image with lower opacity
         -- love.graphics.setColor(1, 1, 1, 0.7)
         -- love.graphics.draw(img, 0,0, nil, 6)
