@@ -60,9 +60,37 @@ function Player:update(dt)
 
     self.collider:setLinearVelocity(vx, vy)
 
-    self.x = self.collider:getX() + 1
-    self.y = self.collider:getY() + 1
+    self.x = self.collider:getX()
+    self.y = self.collider:getY()
     self.anim:update(dt)
+
+    -- map borders provider
+    if self.y <= 0 + 8*6 then
+        self.collider:setLinearVelocity(vx, math.max(0, vy))
+    end
+    if self.y >= MAP_HEIGHT - 8*6 then
+        self.collider:setLinearVelocity(vx, math.min(0, vy))
+    end
+    if self.x <= 0 + 5*6 then
+        self.collider:setLinearVelocity(math.max(0, vx), vy)
+    end
+    if self.x >= MAP_WIDTH - 5*6 then
+        self.collider:setLinearVelocity(math.min(0, vx), vy)
+    end
+    --corners
+    if self.y <= 0 + 8*6 and self.x <= 0 + 5*6 then
+        self.collider:setLinearVelocity(math.max(0, vx), math.max(0, vy))
+    end
+    if self.y >= MAP_HEIGHT - 8*6 and self.x <= 0 + 5*6 then
+        self.collider:setLinearVelocity(math.max(0, vx), math.min(0, vy))
+    end
+    if self.y <= 0 + 8*6 and self.x >= MAP_WIDTH - 5*6 then
+        self.collider:setLinearVelocity(math.min(0, vx), math.max(0, vy))
+    end
+    if self.y >= MAP_HEIGHT - 8*6 and self.x >= MAP_WIDTH - 5*6 then
+        self.collider:setLinearVelocity(math.min(0, vx),  math.min(0, vy))
+    end
+
 end
 
 function Player:render()
