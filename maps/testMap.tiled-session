@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "testMap.tmx",
+    "activeFile": "test_map.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -40,8 +40,8 @@
     ],
     "project": "testMap.tiled-project",
     "recentFiles": [
-        "test_map.tmx",
-        "testMap.tmx"
+        "testMap.tmx",
+        "test_map.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
