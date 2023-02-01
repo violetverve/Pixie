@@ -13,6 +13,8 @@ function love.load()
     sti = require 'libraries/sti'
     gameMap = sti('maps/testMap.lua')
 
+
+
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         vsync = true,
         fullscreen = false,
@@ -62,7 +64,8 @@ function love.update(dt)
     -- img = love.graphics.newImage('images/characters/boy-charecter.png')
 
     lightManager:update(dt)
-    shaders:update(dt)
+    world:update(dt)
+    -- shaders:update(dt)
 end
 
 function love.draw()

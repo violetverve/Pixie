@@ -51,27 +51,27 @@ function shaders:update(dt)
     local mapW = gameMap.width * gameMap.tilewidth
     local mapH = gameMap.height * gameMap.tileheight
 
-    local lightX = (windowWidth/2)
-    local lightY = (windowHeight/2)
+    local lightX = (WINDOW_WIDTH/2)
+    local lightY = (WINDOW_HEIGHT/2)
 
     -- Left border
-    if cam.x < windowWidth/2 then
+    if cam.x < WINDOW_WIDTH/2 then
         lightX = px * scale
     end
 
     -- Top border
-    if cam.y < windowHeight/2 then
+    if cam.y < WINDOW_HEIGHT/2 then
         lightY = py * scale
     end
 
     -- Right border
-    if cam.x > (mapW - windowWidth/2) then
-        lightX = (px - cam.x) * scale + (windowWidth/2)
+    if cam.x > (mapW - WINDOW_WIDTH/2) then
+        lightX = (px - cam.x) * scale + (WINDOW_WIDTH/2)
     end
 
     -- Bottom border
-    if cam.y > (mapH - windowHeight/2) then
-        lightY = (py - cam.y) * scale + (windowHeight/2)
+    if cam.y > (mapH - WINDOW_HEIGHT/2) then
+        lightY = (py - cam.y) * scale + (WINDOW_HEIGHT/2)
     end
 
     shaders.simpleLight:send("playerX", lightX)
