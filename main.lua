@@ -62,6 +62,7 @@ function love.update(dt)
     -- img = love.graphics.newImage('images/characters/boy-charecter.png')
 
     lightManager:update(dt)
+    shaders:update(dt)
 end
 
 function love.draw()
@@ -76,7 +77,6 @@ function love.draw()
 
         world:draw()
         lightManager:render()
-
         -- draw an image with lower opacity
         -- love.graphics.setColor(1, 1, 1, timer * 0.1)
         -- love.graphics.draw(img, 0,0, nil, 6)
