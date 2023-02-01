@@ -7,3 +7,4 @@ Class = require 'libraries/class'
 
 
 require 'src/Player'
+require 'src/LightManager'

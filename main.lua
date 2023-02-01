@@ -17,6 +17,7 @@ function love.load()
     })
 
     player = Player()
+    lightManager = LightManager()
 end
 
 function love.update(dt)
@@ -53,7 +54,9 @@ function love.update(dt)
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
     
-    img = love.graphics.newImage('images/characters/boy-charecter.png')
+    -- img = love.graphics.newImage('images/characters/boy-charecter.png')
+    
+    lightManager:update(dt)
 end
 
 function love.draw()
@@ -62,20 +65,13 @@ function love.draw()
         -- gameMap:draw()
         gameMap:drawLayer(gameMap.layers['ground'])
         gameMap:drawLayer(gameMap.layers['trees'])
-    -- love.graphics.draw(BACKGROUND_IMAGE, 0, 0)
         player:render()
-
+        lightManager:render()
 
         -- draw an image with lower opacity
-        -- love.graphics.setColor(1, 1, 1, 0.7)
+        -- love.graphics.setColor(1, 1, 1, timer * 0.1)
         -- love.graphics.draw(img, 0,0, nil, 6)
         -- love.graphics.setColor(1, 1, 1) 
-
-        -- night filter
-        -- love.graphics.setColor(0, 0, 0, 0.7)
-        -- love.graphics.rectangle("fill", 0, 0, 2000, 2000)
-        -- love.graphics.setColor(1, 1, 1) 
-        
     cam:detach()
         -- push:finish()
 

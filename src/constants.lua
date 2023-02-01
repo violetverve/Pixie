@@ -6,4 +6,8 @@ VIRTUAL_WIDTH = 999
 VIRTUAL_HEIGHT = 500
 
 
--- BACKGROUND_IMAGE = love.graphics.newImage('images/back_green.png')
+-- light manager related constants
+DAY_DUR = 100
+NIGHT_DUR = 100
+TRANSITION_DUR = 120
+DAY_NIGHT_DUR = DAY_DUR + NIGHT_DUR
