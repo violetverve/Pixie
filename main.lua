@@ -1,18 +1,13 @@
 require 'src/dependencies'
 
 function love.load()
-    camera = require 'libraries/camera'
     cam = camera()
-
     world = wf.newWorld(0, 0)
     world:addCollisionClass('Tree')
     world:addCollisionClass('Player')
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setTitle('Pixie')
-
-    sti = require 'libraries/sti'
     gameMap = sti('maps/testMap.lua')
-
 
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -78,19 +73,8 @@ function love.draw()
 
         world:draw()
         lightManager:render()
-
-
-        -- draw an image with lower opacity
-        -- love.graphics.setColor(1, 1, 1, timer * 0.1)
-        -- love.graphics.draw(img, 0,0, nil, 6)
-        -- love.graphics.setColor(1, 1, 1)
     cam:detach()
-
-    -- love.graphics.setShader(shaders.trueLight)
-    -- lightManager:render()
     -- love.graphics.rectangle("fill", -10, -10, 2000, 2000)
-    --  love.graphics.setShader()
-
 end
 
 function love.keypressed(key)
