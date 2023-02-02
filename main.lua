@@ -60,12 +60,10 @@ function love.update(dt)
 
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
-    
-    -- img = love.graphics.newImage('images/characters/boy-charecter.png')
 
     -- lightManager:update(dt)
     world:update(dt)
-    -- shaders:update(dt)
+
 end
 
 function love.draw()
@@ -75,14 +73,11 @@ function love.draw()
         gameMap:drawLayer(gameMap.layers['ground'])
         gameMap:drawLayer(gameMap.layers['trees'])
 
-    -- love.graphics.draw(BACKGROUND_IMAGE, 0, 0)
         tree:render()
-        -- gameMap::drawBeforePlayer(x, y)
         player:render()
-        -- gameMap::drawAftrePlayer(x, y)
 
         world:draw()
-        -- lightManager:render()
+        lightManager:render()
 
 
         -- draw an image with lower opacity

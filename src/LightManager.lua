@@ -27,10 +27,12 @@ function LightManager:update(dt)
     else
         self.timer = 0
     end
+
+    shaders:update(dt, self.opacityTrecker)
 end
 
 function LightManager:render()
-    love.graphics.setColor(0, 0, 0, self.opacityTrecker * 0.1)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-    love.graphics.setColor(1, 1, 1) 
+    love.graphics.setShader(shaders.trueLight)
+    love.graphics.rectangle("fill", -10, -10, 2000, 2000)
+    love.graphics.setShader()
 end

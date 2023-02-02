@@ -10,7 +10,7 @@ MAP_HEIGHT = 1920
 
 
 -- light manager related constants
-DAY_DUR = 10
-NIGHT_DUR = 10
+DAY_DUR = 100
+NIGHT_DUR = 100
 TRANSITION_DUR = 120
 DAY_NIGHT_DUR = DAY_DUR + NIGHT_DUR
