@@ -63,29 +63,38 @@ function love.update(dt)
     
     -- img = love.graphics.newImage('images/characters/boy-charecter.png')
 
-    lightManager:update(dt)
+    -- lightManager:update(dt)
     world:update(dt)
     -- shaders:update(dt)
 end
 
 function love.draw()
-    -- push:start()
+
     cam:attach()
         -- gameMap:draw()
         gameMap:drawLayer(gameMap.layers['ground'])
         gameMap:drawLayer(gameMap.layers['trees'])
+
     -- love.graphics.draw(BACKGROUND_IMAGE, 0, 0)
         tree:render()
+        -- gameMap::drawBeforePlayer(x, y)
         player:render()
+        -- gameMap::drawAftrePlayer(x, y)
 
         world:draw()
-        lightManager:render()
+        -- lightManager:render()
+
+
         -- draw an image with lower opacity
         -- love.graphics.setColor(1, 1, 1, timer * 0.1)
         -- love.graphics.draw(img, 0,0, nil, 6)
         -- love.graphics.setColor(1, 1, 1)
     cam:detach()
-        -- push:finish()
+
+    -- love.graphics.setShader(shaders.trueLight)
+    -- lightManager:render()
+    -- love.graphics.rectangle("fill", -10, -10, 2000, 2000)
+    --  love.graphics.setShader()
 
 end
 

@@ -4,9 +4,9 @@ shaders = {}
 
 -- Hole-punch light source
 shaders.simpleLight = love.graphics.newShader[[
-    extern number playerX = 0;
-    extern number playerY = 0;
-    number radius = 400;
+    uniform number playerX = 300;
+    uniform number playerY = 300;
+    number radius = 200;
     vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ) {
         number distance = pow(pow(screen_coords.x - playerX, 2) + pow(screen_coords.y - playerY, 2), 0.5);
         if (distance < radius) {
@@ -22,7 +22,7 @@ shaders.simpleLight = love.graphics.newShader[[
 shaders.trueLight = love.graphics.newShader[[
     extern number playerX = 0;
     extern number playerY = 0;
-    number radius = 900;
+    number radius = 200;
     vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ) {
         number distance = pow(pow(screen_coords.x - playerX, 2) + pow(screen_coords.y - playerY, 2), 0.5);
         number alpha = distance / radius;
@@ -43,39 +43,13 @@ shaders.whiteout = love.graphics.newShader[[
 ]]
 
 function shaders:update(dt)
-    -- if gameMap.dark then
-    local px = player.x 
-    local py = player.y
 
-    -- Get width/height of background
-    local mapW = gameMap.width * gameMap.tilewidth
-    local mapH = gameMap.height * gameMap.tileheight
+    -- distance between center (of the camera) and players x + half of the screen_width
+    local lightX = (player.x - cam.x) + (WINDOW_WIDTH/2)
+    local lightY = (player.y - cam.y) + (WINDOW_HEIGHT/2)
 
-    local lightX = (WINDOW_WIDTH/2)
-    local lightY = (WINDOW_HEIGHT/2)
-
-    -- Left border
-    if cam.x < WINDOW_WIDTH/2 then
-        lightX = px * scale
-    end
-
-    -- Top border
-    if cam.y < WINDOW_HEIGHT/2 then
-        lightY = py * scale
-    end
-
-    -- Right border
-    if cam.x > (mapW - WINDOW_WIDTH/2) then
-        lightX = (px - cam.x) * scale + (WINDOW_WIDTH/2)
-    end
-
-    -- Bottom border
-    if cam.y > (mapH - WINDOW_HEIGHT/2) then
-        lightY = (py - cam.y) * scale + (WINDOW_HEIGHT/2)
-    end
-
-    shaders.simpleLight:send("playerX", lightX)
-    shaders.simpleLight:send("playerY", lightY)
+    -- shaders.simpleLight:send("playerX", lightX)
+    -- shaders.simpleLight:send("playerY", lightY)
     shaders.trueLight:send("playerX", lightX)
     shaders.trueLight:send("playerY", lightY)
 end
