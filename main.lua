@@ -18,7 +18,7 @@ function love.load()
     })
 
     player = Player()
-    -- apple = Item()
+    apple = Item()
     lightManager = LightManager()
     tree = Tree(300, 100)
 

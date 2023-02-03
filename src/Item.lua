@@ -22,8 +22,8 @@ end
 
 function Item:render()
     -- self.image.draw()
-    if not self.isTaken then
+    -- if not self.isTaken then
         love.graphics.draw(self.image, self.x, self.y, nil, 2.5)
-    end
+    -- end
     -- self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
 end
