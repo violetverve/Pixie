@@ -11,7 +11,7 @@ function Player:init()
     self.width = 12
     self.height = 16
 
-    self.collider = world:newBSGRectangleCollider(self.x, self.y, 8*6, 14*6, 10)
+    self.collider = world:newBSGRectangleCollider(self.x, self.y, 6*6, 7*6, 10)
     self.collider:setCollisionClass('Player')
     self.collider:setFixedRotation(true)
 
@@ -68,8 +68,8 @@ function Player:update(dt)
 
     self.collider:setLinearVelocity(vx, vy)
 
-    self.x = self.collider:getX()
-    self.y = self.collider:getY()
+    self.x = self.collider:getX() 
+    self.y = self.collider:getY() - 20
     self.anim:update(dt)
 
     -- map borders provider
