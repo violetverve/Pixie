@@ -570,9 +570,16 @@ function World:queryCircleArea(x, y, radius, collision_class_names)
     for _, collider in ipairs(colliders) do
         if self:collisionClassInCollisionClassesList(collider.collision_class, collision_class_names) then
             for _, fixture in ipairs(collider.body:getFixtures()) do
-                if self.wf.Math.polygon.getCircleIntersection(x, y, radius, {collider.body:getWorldPoints(fixture:getShape():getPoints())}) then
-                    table.insert(outs, collider)
-                    break
+                if fixture:getShape():type() == 'CircleShape' then
+                    -- circles intersect
+                    if math.sqrt((x - collider:getX())^ 2 + (y - collider:getY()) ^ 2) < radius + collider:getRadius() then
+                        table.insert(outs, collider)
+                    end
+                else
+                    if self.wf.Math.polygon.getCircleIntersection(x, y, radius, {collider.body:getWorldPoints(fixture:getShape():getPoints())}) then
+                        table.insert(outs, collider)
+                        break
+                    end
                 end
             end
         end
