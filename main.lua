@@ -5,6 +5,7 @@ function love.load()
     world = wf.newWorld(0, 0)
     world:addCollisionClass('Tree')
     world:addCollisionClass('Player')
+    world:addCollisionClass('Item')
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setTitle('Pixie')
     gameMap = sti('maps/testMap.lua')
@@ -17,6 +18,7 @@ function love.load()
     })
 
     player = Player()
+    -- apple = Item()
     lightManager = LightManager()
     tree = Tree(300, 100)
 
@@ -70,7 +72,7 @@ function love.draw()
 
         tree:render()
         player:render()
-
+        apple:render()
         world:draw()
         lightManager:render()
     cam:detach()
@@ -81,11 +83,6 @@ end
 function love.keyboard.wasPressed(key)
 
     return love.keyboard.keysPressed[key]
-    -- if love.keyboard.keysPressed[key] then
-    --     return true
-    -- else
-    --     return false
-    -- end
 end
 
 function love.keypressed(key)

@@ -10,7 +10,7 @@ function Player:init()
 
     self.width = 12
     self.height = 16
-
+ 
     self.collider = world:newBSGRectangleCollider(self.x, self.y, 6*6, 7*6, 10)
     self.collider:setCollisionClass('Player')
     self.collider:setFixedRotation(true)
@@ -25,7 +25,9 @@ function Player:init()
 
     self.dir = "right"
     self.score = 0
+    -- self.apples = 0
     self.colliders = {}
+    -- self.items = {}
 end
 
 function Player:update(dt)
@@ -114,17 +116,24 @@ function Player:update(dt)
             qy = qy + 60
         end
         self.colliders = world:queryCircleArea(qx,  qy, 40, {"Tree"})
+        -- self.items = world:queryCircleArea(qx,  qy, 40, {"Item"})
     else
         self.colliders = {}
+        -- self.items = {}
     end
 
     if #self.colliders > 0 then
         self.score = self.score + 1
     end
 
+    -- if #self.items > 0 then
+    --     self.apples = self.apples + 1
+    -- end
+
 end
 
 function Player:render()
     love.graphics.printf('Score: ' .. tostring(self.score) .. " ", 0, 10, VIRTUAL_WIDTH, 'center')
+    -- love.graphics.printf('Apples: ' .. tostring(self.apples) .. " ", 0, 50, VIRTUAL_WIDTH, 'center')
     self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
 end
