@@ -22,6 +22,10 @@ function Player:init()
     self.animations.up = anim8.newAnimation( self.grid('1-4', 4), 0.1 )
 
     self.anim = self.animations.down
+
+    self.dir = "right"
+    self.score = 0
+    self.colliders = {}
 end
 
 function Player:update(dt)
@@ -34,24 +38,28 @@ function Player:update(dt)
         vx = self.speed
         self.anim = self.animations.right
         isMoving = true
+        self.dir = "right"
     end
 
     if love.keyboard.isDown("left") then
         vx = - self.speed
         self.anim = self.animations.left
         isMoving = true
+        self.dir = "left"
     end
 
     if love.keyboard.isDown("down") then
         vy = self.speed
         self.anim = self.animations.down
         isMoving = true
+        self.dir = "down"
     end
 
     if love.keyboard.isDown("up") then
         vy = - self.speed
         self.anim = self.animations.up
         isMoving = true
+        self.dir = "up"
     end
 
     if not isMoving then
@@ -91,8 +99,30 @@ function Player:update(dt)
         self.collider:setLinearVelocity(math.min(0, vx),  math.min(0, vy))
     end
 
+    if love.keyboard.wasPressed('space') then
+        -- position of the query circle
+        local qx, qy = player.collider:getPosition()
+        if self.dir == "right" then
+            qx = qx + 60
+        elseif self.dir == "left" then
+            qx = qx - 60
+        elseif self.dir == "up" then
+            qy = qy - 60
+        elseif self.dir == "down" then
+            qy = qy + 60
+        end
+        self.colliders = world:queryCircleArea(qx,  qy, 40, {"Tree"})
+    else
+        self.colliders = {}
+    end
+
+    if #self.colliders > 0 then
+        self.score = self.score + 1
+    end
+
 end
 
 function Player:render()
+    love.graphics.printf('Score: ' .. tostring(self.score) .. " ", 0, 10, VIRTUAL_WIDTH, 'center')
     self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
 end

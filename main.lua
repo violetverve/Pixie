@@ -8,7 +8,7 @@ function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setTitle('Pixie')
     gameMap = sti('maps/testMap.lua')
-
+    world:setQueryDebugDrawing(true) 
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         vsync = true,
@@ -19,6 +19,9 @@ function love.load()
     player = Player()
     lightManager = LightManager()
     tree = Tree(300, 100)
+
+    love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 function love.update(dt)
@@ -52,13 +55,10 @@ function love.update(dt)
         cam.y = (mapH -h/2)
     end
 
-
-    love.keyboard.keysPressed = {}
-    love.mouse.buttonsPressed = {}
-
     -- lightManager:update(dt)
     world:update(dt)
-
+    love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 function love.draw()
@@ -77,7 +77,21 @@ function love.draw()
     -- love.graphics.rectangle("fill", -10, -10, 2000, 2000)
 end
 
+
+function love.keyboard.wasPressed(key)
+
+    return love.keyboard.keysPressed[key]
+    -- if love.keyboard.keysPressed[key] then
+    --     return true
+    -- else
+    --     return false
+    -- end
+end
+
 function love.keypressed(key)
+    -- add to our table of keys pressed this frame
+    love.keyboard.keysPressed[key] = true
+
     if key == 'escape' then
         love.event.quit()
     end
