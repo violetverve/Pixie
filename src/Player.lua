@@ -66,7 +66,9 @@ function Player:update(dt)
         self.anim:gotoFrame(2)
     end
 
-    self.collider:setLinearVelocity(vx, vy)
+    -- diagonal walk fixed by normalization of vector
+    vec = vector(vx, vy):normalized() * player.speed
+    self.collider:setLinearVelocity(vec.x, vec.y)
 
     self.x = self.collider:getX() 
     self.y = self.collider:getY() - 20
