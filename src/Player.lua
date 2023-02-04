@@ -14,7 +14,7 @@ function Player:init()
     self.collider = world:newBSGRectangleCollider(self.x, self.y, 6*6, 7*6, 10)
     self.collider:setCollisionClass('Player')
     self.collider:setFixedRotation(true)
-
+ 
     self.animations = {}
     self.animations.down = anim8.newAnimation( self.grid('1-4', 1), 0.1 )
     self.animations.left = anim8.newAnimation( self.grid('1-4', 2), 0.1 )
@@ -24,10 +24,8 @@ function Player:init()
     self.anim = self.animations.down
 
     self.dir = "right"
-    self.score = 0
-    self.apples = 0
     self.colliders = {}
-    self.items = {}
+    self.backpack = {}
 end
 
 function Player:update(dt)
@@ -111,29 +109,28 @@ function Player:update(dt)
         elseif self.dir == "left" then
             qx = qx - 60
         elseif self.dir == "up" then
-            qy = qy - 60
+            qy = qy - 60 
         elseif self.dir == "down" then
             qy = qy + 60
         end
-        self.colliders = world:queryCircleArea(qx,  qy, 40, {"Tree"})
-        self.items = world:queryCircleArea(qx,  qy, 40, {"Item"})
+        -- self.colliders = world:queryCircleArea(qx,  qy, 40, {"Tree"})
+        self.colliders = world:queryCircleArea(qx,  qy, 40, {"Item"})
     else
-        self.colliders = {}
-        self.items = {}
+        self.colliders = {}  
     end
 
     if #self.colliders > 0 then
-        self.score = self.score + 1
-    end
-
-    if #self.items > 0 then
-        self.apples = self.apples + 1
+        for i,c in ipairs(self.colliders) do
+            self.backpack[c.type] = self.backpack[c.type] or 0 + 1
+            c.isTaken = true
+            c:destroy()
+        end
     end
 
 end
 
 function Player:render()
-    love.graphics.printf('Score: ' .. tostring(self.score) .. " ", 0, 10, VIRTUAL_WIDTH, 'center')
-    love.graphics.printf('Apples: ' .. tostring(self.apples) .. " ", 0, 50, VIRTUAL_WIDTH, 'center')
+    -- love.graphics.printf('Score: ' .. tostring(self.id1) .. " ", 0, 10, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Apples: ' .. tostring(self.backpack.apple) .. " ", 0, 50, VIRTUAL_WIDTH, 'center')
     self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
 end
