@@ -30,7 +30,7 @@ World = {}
 World.__index = World 
 
 function wf.newWorld(xg, yg, sleep)
-    local world = wf.World.new(wf, xg, yg, sleep)
+    local world = wf.World:new(wf, xg, yg, sleep)
 
     world.box2d_world:setCallbacks(world.collisionOnEnter, world.collisionOnExit, world.collisionPre, world.collisionPost)
     world:collisionClear()
@@ -38,7 +38,7 @@ function wf.newWorld(xg, yg, sleep)
 
     -- Points all box2d_world functions to this wf.World object
     -- This means that the user can call world:setGravity for instance without having to say world.box2d_world:setGravity
-    for k, v in pairs(world.box2d_world.__index) do 
+    for k, v in pairs(world.box2d_world.__index) do
         if k ~= '__gc' and k ~= '__eq' and k ~= '__index' and k ~= '__tostring' and k ~= 'update' and k ~= 'destroy' and k ~= 'type' and k ~= 'typeOf' then
             world[k] = function(self, ...)
                 return v(self.box2d_world, ...)
@@ -49,7 +49,7 @@ function wf.newWorld(xg, yg, sleep)
     return world
 end
 
-function World.new(wf, xg, yg, sleep)
+function World:new(wf, xg, yg, sleep)
     local self = {}
     local settings = settings or {}
     self.wf = wf
@@ -61,9 +61,8 @@ function World.new(wf, xg, yg, sleep)
     self.masks = {}
     self.is_sensor_memo = {}
     self.query_debug_draw = {}
-
     love.physics.setMeter(32)
-    self.box2d_world = love.physics.newWorld(xg, yg, sleep) 
+    self.box2d_world = love.physics.newWorld(xg, yg, sleep)
 
     return setmetatable(self, World)
 end
@@ -124,6 +123,7 @@ function World:draw(alpha)
         elseif query_draw.type == 'polygon' then
             local triangles = love.math.triangulate(query_draw.vertices)
             for _, triangle in ipairs(triangles) do love.graphics.polygon('line', triangle) end
+
         end
     end
     for i = #self.query_debug_draw, 1, -1 do
@@ -385,7 +385,7 @@ function World.collisionOnEnter(fixture_a, fixture_b, contact)
                 if collIf(collision.type1, collision.type2, a, b) then
                     a, b = collEnsure(collision.type1, a, collision.type2, b)
                     table.insert(a.collision_events[collision.type2], {collision_type = 'enter', collider_1 = a, collider_2 = b, contact = contact})
-                    if collision.type1 == collision.type2 then 
+                    if collision.type1 == collision.type2 then
                         table.insert(b.collision_events[collision.type1], {collision_type = 'enter', collider_1 = b, collider_2 = a, contact = contact})
                     end
                 end
@@ -398,7 +398,7 @@ function World.collisionOnEnter(fixture_a, fixture_b, contact)
                 if collIf(collision.type1, collision.type2, a, b) then
                     a, b = collEnsure(collision.type1, a, collision.type2, b)
                     table.insert(a.collision_events[collision.type2], {collision_type = 'enter', collider_1 = a, collider_2 = b, contact = contact})
-                    if collision.type1 == collision.type2 then 
+                    if collision.type1 == collision.type2 then
                         table.insert(b.collision_events[collision.type1], {collision_type = 'enter', collider_1 = b, collider_2 = a, contact = contact})
                     end
                 end
@@ -416,7 +416,7 @@ function World.collisionOnExit(fixture_a, fixture_b, contact)
                 if collIf(collision.type1, collision.type2, a, b) then
                     a, b = collEnsure(collision.type1, a, collision.type2, b)
                     table.insert(a.collision_events[collision.type2], {collision_type = 'exit', collider_1 = a, collider_2 = b, contact = contact})
-                    if collision.type1 == collision.type2 then 
+                    if collision.type1 == collision.type2 then
                         table.insert(b.collision_events[collision.type1], {collision_type = 'exit', collider_1 = b, collider_2 = a, contact = contact})
                     end
                 end
@@ -429,7 +429,7 @@ function World.collisionOnExit(fixture_a, fixture_b, contact)
                 if collIf(collision.type1, collision.type2, a, b) then
                     a, b = collEnsure(collision.type1, a, collision.type2, b)
                     table.insert(a.collision_events[collision.type2], {collision_type = 'exit', collider_1 = a, collider_2 = b, contact = contact})
-                    if collision.type1 == collision.type2 then 
+                    if collision.type1 == collision.type2 then
                         table.insert(b.collision_events[collision.type1], {collision_type = 'exit', collider_1 = b, collider_2 = a, contact = contact})
                     end
                 end
@@ -447,7 +447,7 @@ function World.collisionPre(fixture_a, fixture_b, contact)
                 if collIf(collision.type1, collision.type2, a, b) then
                     a, b = collEnsure(collision.type1, a, collision.type2, b)
                     a:preSolve(b, contact)
-                    if collision.type1 == collision.type2 then 
+                    if collision.type1 == collision.type2 then
                         b:preSolve(a, contact)
                     end
                 end
@@ -460,7 +460,7 @@ function World.collisionPre(fixture_a, fixture_b, contact)
                 if collIf(collision.type1, collision.type2, a, b) then
                     a, b = collEnsure(collision.type1, a, collision.type2, b)
                     a:preSolve(b, contact)
-                    if collision.type1 == collision.type2 then 
+                    if collision.type1 == collision.type2 then
                         b:preSolve(a, contact)
                     end
                 end
@@ -478,7 +478,7 @@ function World.collisionPost(fixture_a, fixture_b, contact, ni1, ti1, ni2, ti2)
                 if collIf(collision.type1, collision.type2, a, b) then
                     a, b = collEnsure(collision.type1, a, collision.type2, b)
                     a:postSolve(b, contact, ni1, ti1, ni2, ti2)
-                    if collision.type1 == collision.type2 then 
+                    if collision.type1 == collision.type2 then
                         b:postSolve(a, contact, ni1, ti1, ni2, ti2)
                     end
                 end
@@ -491,7 +491,7 @@ function World.collisionPost(fixture_a, fixture_b, contact, ni1, ti1, ni2, ti2)
                 if collIf(collision.type1, collision.type2, a, b) then
                     a, b = collEnsure(collision.type1, a, collision.type2, b)
                     a:postSolve(b, contact, ni1, ti1, ni2, ti2)
-                    if collision.type1 == collision.type2 then 
+                    if collision.type1 == collision.type2 then
                         b:postSolve(a, contact, ni1, ti1, ni2, ti2)
                     end
                 end
@@ -544,7 +544,7 @@ function World:collisionClassInCollisionClassesList(collision_class, collision_c
         if collision_classes.except then
             for _, except in ipairs(collision_classes.except) do
                 for i, class in ipairs(all_collision_classes) do
-                    if class == except then 
+                    if class == except then
                         table.remove(all_collision_classes, i)
                         break
                     end
@@ -564,21 +564,23 @@ end
 function World:queryCircleArea(x, y, radius, collision_class_names)
     if not collision_class_names then collision_class_names = {'All'} end
     if self.query_debug_drawing_enabled then table.insert(self.query_debug_draw, {type = 'circle', x = x, y = y, r = radius, frames = self.draw_query_for_n_frames}) end
-    
-    local colliders = self:_queryBoundingBox(x-radius, y-radius, x+radius, y+radius) 
+
+    local colliders = self:_queryBoundingBox(x-radius, y-radius, x+radius, y+radius)
     local outs = {}
     for _, collider in ipairs(colliders) do
         if self:collisionClassInCollisionClassesList(collider.collision_class, collision_class_names) then
             for _, fixture in ipairs(collider.body:getFixtures()) do
-                if fixture:getShape():type() == 'CircleShape' then
-                    -- circles intersect
-                    if math.sqrt((x - collider:getX())^ 2 + (y - collider:getY()) ^ 2) < radius + collider:getRadius() then
-                        table.insert(outs, collider)
-                    end
-                else
-                    if self.wf.Math.polygon.getCircleIntersection(x, y, radius, {collider.body:getWorldPoints(fixture:getShape():getPoints())}) then
-                        table.insert(outs, collider)
-                        break
+                if fixture:getShape().getPoints then
+                  if self.wf.Math.polygon.getCircleIntersection(x, y, radius, {collider.body:getWorldPoints(fixture:getShape():getPoints())}) then
+                      table.insert(outs, collider)
+                      break
+                  end
+                else --if queried collider is a circle
+                  local cx, cy = collider.body:getWorldPoints(fixture:getShape():getPoint())
+                  local cr = fixture:getShape():getRadius()
+                  if self.wf.Math.circle.getCircleIntersection(x, y, radius, cx, cy, cr) then
+                      table.insert(outs, collider)
+                      break
                     end
                 end
             end
@@ -591,15 +593,22 @@ function World:queryRectangleArea(x, y, w, h, collision_class_names)
     if not collision_class_names then collision_class_names = {'All'} end
     if self.query_debug_drawing_enabled then table.insert(self.query_debug_draw, {type = 'rectangle', x = x, y = y, w = w, h = h, frames = self.draw_query_for_n_frames}) end
 
-    local colliders = self:_queryBoundingBox(x, y, x+w, y+h) 
+    local colliders = self:_queryBoundingBox(x, y, x+w, y+h)
     local outs = {}
     for _, collider in ipairs(colliders) do
         if self:collisionClassInCollisionClassesList(collider.collision_class, collision_class_names) then
             for _, fixture in ipairs(collider.body:getFixtures()) do
+              if fixture:getShape().getPoints then
                 if self.wf.Math.polygon.isPolygonInside({x, y, x+w, y, x+w, y+h, x, y+h}, {collider.body:getWorldPoints(fixture:getShape():getPoints())}) then
                     table.insert(outs, collider)
                     break
                 end
+              else--if queried collider is a circle
+                  if self.wf.Math.polygon.isPolygonInside({x, y, x+w, y, x+w, y+h, x, y+h}, {collider.body:getWorldPoints(fixture:getShape():getPoint())}) then
+                      table.insert(outs, collider)
+                      break
+                    end
+              end
             end
         end
     end
@@ -621,9 +630,16 @@ function World:queryPolygonArea(vertices, collision_class_names)
     for _, collider in ipairs(colliders) do
         if self:collisionClassInCollisionClassesList(collider.collision_class, collision_class_names) then
             for _, fixture in ipairs(collider.body:getFixtures()) do
-                if self.wf.Math.polygon.isPolygonInside(vertices, {collider.body:getWorldPoints(fixture:getShape():getPoints())}) then
+                if fixture:getShape().getPoints then
+                  if self.wf.Math.polygon.isPolygonInside(vertices, {collider.body:getWorldPoints(fixture:getShape():getPoints())}) then
                     table.insert(outs, collider)
                     break
+                  end
+                else--if queried collider is a circle
+                  if self.wf.Math.polygon.isPolygonInside(vertices, {collider.body:getWorldPoints(fixture:getShape():getPoint())}) then
+                    table.insert(outs, collider)
+                    break
+                  end
                 end
             end
         end
@@ -633,8 +649,8 @@ end
 
 function World:queryLine(x1, y1, x2, y2, collision_class_names)
     if not collision_class_names then collision_class_names = {'All'} end
-    if self.query_debug_drawing_enabled then 
-        table.insert(self.query_debug_draw, {type = 'line', x1 = x1, y1 = y1, x2 = x2, y2 = y2, frames = self.draw_query_for_n_frames}) 
+    if self.query_debug_drawing_enabled then
+        table.insert(self.query_debug_draw, {type = 'line', x1 = x1, y1 = y1, x2 = x2, y2 = y2, frames = self.draw_query_for_n_frames})
     end
 
     local colliders = {}
@@ -668,10 +684,10 @@ end
 function World:destroy()
     local bodies = self.box2d_world:getBodies()
     for _, body in ipairs(bodies) do
-        local collider = body:getFixtures()[1]:getUserData()
+        local collider = body:getFixtureList()[1]:getUserData()
         collider:destroy()
     end
-    local joints = self.box2d_world:getJoints()
+    local joints = self.box2d_world:getJointList()
     for _, joint in ipairs(joints) do joint:destroy() end
     self.box2d_world:destroy()
     self.box2d_world = nil
@@ -745,7 +761,7 @@ function Collider.new(world, collider_type, ...)
     elseif self.type == 'Chain' then
         self.collision_class = (args[3] and args[3].collision_class) or 'Default'
         self.body = love.physics.newBody(self.world.box2d_world, 0, 0, (args[3] and args[3].body_type) or 'dynamic')
-        shape = love.physics.newChainShape(args[1], unpack(args[2]))
+        shape = love.physics.newChainShape(args[2], unpack(args[1]))
     end
 
     -- Define collision classes and attach them to fixture and sensor
@@ -764,27 +780,27 @@ function Collider.new(world, collider_type, ...)
     self.sensors['main'] = sensor
     self.shape = shape
     self.fixture = fixture
-    
+
     self.preSolve = function() end
     self.postSolve = function() end
 
     -- Points all body, fixture and shape functions to this wf.Collider object
     -- This means that the user can call collider:setLinearVelocity for instance without having to say collider.body:setLinearVelocity
-    for k, v in pairs(self.body.__index) do 
+    for k, v in pairs(self.body.__index) do
         if k ~= '__gc' and k ~= '__eq' and k ~= '__index' and k ~= '__tostring' and k ~= 'destroy' and k ~= 'type' and k ~= 'typeOf' then
             self[k] = function(self, ...)
                 return v(self.body, ...)
             end
         end
     end
-    for k, v in pairs(self.fixture.__index) do 
+    for k, v in pairs(self.fixture.__index) do
         if k ~= '__gc' and k ~= '__eq' and k ~= '__index' and k ~= '__tostring' and k ~= 'destroy' and k ~= 'type' and k ~= 'typeOf' then
             self[k] = function(self, ...)
                 return v(self.fixture, ...)
             end
         end
     end
-    for k, v in pairs(self.shape.__index) do 
+    for k, v in pairs(self.shape.__index) do
         if k ~= '__gc' and k ~= '__eq' and k ~= '__index' and k ~= '__tostring' and k ~= 'destroy' and k ~= 'type' and k ~= 'typeOf' then
             self[k] = function(self, ...)
                 return v(self.shape, ...)
@@ -843,7 +859,7 @@ function Collider:exit(other_collision_class_name)
                     end
                 end
                 self.exit_collision_data[other_collision_class_name] = {collider = e.collider_2, contact = e.contact}
-                return true 
+                return true
             end
         end
     end
@@ -874,7 +890,7 @@ function Collider:setPostSolve(callback)
 end
 
 function Collider:setObject(object)
-    self.object = object 
+    self.object = object
 end
 
 function Collider:getObject()
@@ -933,4 +949,3 @@ wf.World = World
 wf.Collider = Collider
 
 return wf
-
