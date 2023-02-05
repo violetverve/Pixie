@@ -55,5 +55,5 @@ ITEMS_DEFS = {
         image = love.graphics.newImage('images/items/watermelon_whole.png'),
         colliderType = 'circle',
         type = 'watermelon'
-    },
+    }
 }
