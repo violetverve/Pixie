@@ -31,6 +31,8 @@ function love.load()
     itemManager:addItem('watermelon', 320, 249)
     itemManager:addItem('corn', 400, 400)
 
+    playerBackpack = BackpackManager(player.backpack)
+
     trees = TreeMaker()
     trees:findTrees()
 
@@ -73,6 +75,8 @@ function love.update(dt)
     -- lightManager:update(dt)
     itemManager:update()
     world:update(dt)
+    playerBackpack:update(dt)
+
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
 end
@@ -97,6 +101,7 @@ function love.draw()
         lightManager:render()
     cam:detach()
 
+    playerBackpack:render()
 end
 
 
@@ -112,4 +117,13 @@ function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
     end
+end
+
+function table.contains(table, element)
+    for _, value in pairs(table) do
+        if value == element then
+            return true
+        end
+    end
+    return false
 end

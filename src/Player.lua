@@ -29,6 +29,44 @@ function Player:init()
 end
 
 function Player:update(dt)
+    self:updateMoving(dt)
+
+    if love.keyboard.wasPressed('space') then
+        -- position of the query circle
+        local qx, qy = player.collider:getPosition()
+        if self.dir == "right" then
+            qx = qx + 60
+        elseif self.dir == "left" then
+            qx = qx - 60
+        elseif self.dir == "up" then
+            qy = qy - 60
+        elseif self.dir == "down" then
+            qy = qy + 60
+        end
+        -- self.colliders = world:queryCircleArea(qx,  qy, 40, {"Tree"})
+        self.colliders = world:queryCircleArea(qx,  qy, 40, {"Item"})
+    else
+        self.colliders = {}
+    end
+
+    if #self.colliders > 0 then
+        for i,c in ipairs(self.colliders) do
+            self.backpack[c.type] = self.backpack[c.type] or 0
+            self.backpack[c.type] = self.backpack[c.type] + 1
+            c.isTaken = true
+            c:destroy()
+        end
+    end
+
+end
+
+function Player:render()
+    -- love.graphics.printf('Score: ' .. tostring(self.id1) .. " ", 0, 10, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Apples: ' .. tostring(self.backpack['apple']) .. " ", 0, 50, VIRTUAL_WIDTH, 'center')
+    self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
+end
+
+function Player:updateMoving(dt)
     local isMoving = false
 
     local vx = 0
@@ -70,7 +108,7 @@ function Player:update(dt)
     vec = vector(vx, vy):normalized() * player.speed
     self.collider:setLinearVelocity(vec.x, vec.y)
 
-    self.x = self.collider:getX() 
+    self.x = self.collider:getX()
     self.y = self.collider:getY() - 30
     self.anim:update(dt)
 
@@ -100,38 +138,4 @@ function Player:update(dt)
     if self.y >= MAP_HEIGHT - 8*6 and self.x >= MAP_WIDTH - 5*6 then
         self.collider:setLinearVelocity(math.min(0, vx),  math.min(0, vy))
     end
-
-    if love.keyboard.wasPressed('space') then
-        -- position of the query circle
-        local qx, qy = player.collider:getPosition()
-        if self.dir == "right" then
-            qx = qx + 60
-        elseif self.dir == "left" then
-            qx = qx - 60
-        elseif self.dir == "up" then
-            qy = qy - 60
-        elseif self.dir == "down" then
-            qy = qy + 60
-        end
-        -- self.colliders = world:queryCircleArea(qx,  qy, 40, {"Tree"})
-        self.colliders = world:queryCircleArea(qx,  qy, 40, {"Item"})
-    else
-        self.colliders = {}
-    end
-
-    if #self.colliders > 0 then
-        for i,c in ipairs(self.colliders) do
-            self.backpack[c.type] = self.backpack[c.type] or 0
-            self.backpack[c.type] = self.backpack[c.type] + 1
-            c.isTaken = true
-            c:destroy()
-        end
-    end
-
-end
-
-function Player:render()
-    -- love.graphics.printf('Score: ' .. tostring(self.id1) .. " ", 0, 10, VIRTUAL_WIDTH, 'center')
-    love.graphics.printf('Apples: ' .. tostring(self.backpack['apple']) .. " ", 0, 50, VIRTUAL_WIDTH, 'center')
-    self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
 end

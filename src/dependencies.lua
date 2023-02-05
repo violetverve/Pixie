@@ -17,3 +17,5 @@ require 'src/shaders'
 require 'src/TreeMaker'
 require 'src/items'
 require 'src/ItemManager'
+
+require 'src/BackpackManager'
