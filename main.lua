@@ -18,9 +18,11 @@ function love.load()
     })
 
     player = Player()
-    apple = Item()
     lightManager = LightManager()
-    --tree = Tree(300, 100)
+    itemManager = ItemManager()
+    itemManager:addItem('apple', 100, 200)
+    itemManager:addItem('apple', 300, 300)
+
     trees = TreeMaker()
     trees:findTrees()
 
@@ -31,7 +33,7 @@ end
 function love.update(dt)
     player:update(dt)
     trees:update(dt)
-    apple:update(dt)
+    -- apple:update(dt)
     cam:lookAt(player.x, player.y)
 
     local w = love.graphics.getWidth()
@@ -61,6 +63,7 @@ function love.update(dt)
     end
 
     -- lightManager:update(dt)
+    itemManager:update()
     world:update(dt)
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
@@ -76,10 +79,11 @@ function love.draw()
 
 
         trees:renderTreesAbove()
-        apple:renderItemAbove()
+        -- apple:renderItemAbove()
+        itemManager:renderItemAbove()
         player:render()
         trees:renderTreesBelow()
-        apple:renderItemBelow()
+        itemManager:renderItemBelow()
 
         -- world:draw()
         lightManager:render()

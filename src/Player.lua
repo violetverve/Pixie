@@ -121,7 +121,8 @@ function Player:update(dt)
 
     if #self.colliders > 0 then
         for i,c in ipairs(self.colliders) do
-            self.backpack[c.type] = self.backpack[c.type] or 0 + 1
+            self.backpack[c.type] = self.backpack[c.type] or 0
+            self.backpack[c.type] = self.backpack[c.type] + 1
             c.isTaken = true
             c:destroy()
         end
@@ -131,6 +132,6 @@ end
 
 function Player:render()
     -- love.graphics.printf('Score: ' .. tostring(self.id1) .. " ", 0, 10, VIRTUAL_WIDTH, 'center')
-    love.graphics.printf('Apples: ' .. tostring(self.backpack.apple) .. " ", 0, 50, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Apples: ' .. tostring(self.backpack['apple']) .. " ", 0, 50, VIRTUAL_WIDTH, 'center')
     self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
 end
