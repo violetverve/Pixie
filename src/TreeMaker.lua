@@ -22,10 +22,13 @@ end
 function TreeMaker:getTreesRelationPos(x, y)
     local trees_above = {}
     local trees_below = {}
+    local transparent = nil
 
     for i, tree in ipairs(self.trees) do
         if tree.y + tree.height - 4 <= y + player.height then
             table.insert(trees_above, tree)
+        elseif self:checkIfBehind(x, y, tree) then
+            transparent = tree
         else
             table.insert(trees_below, tree)
         end
@@ -33,6 +36,7 @@ function TreeMaker:getTreesRelationPos(x, y)
 
     self.trees_above = trees_above
     self.trees_below = trees_below
+    self.transparent = transparent
 end
 
 
@@ -47,6 +51,11 @@ function TreeMaker:renderTreesAbove()
 end
 
 function TreeMaker:renderTreesBelow()
+    if self.transparent then
+        love.graphics.setColor(1,1,1,0.4)
+        self.transparent:render()
+        love.graphics.setColor(1,1,1)
+    end
     for i, tree in pairs(self.trees_below) do
         tree:render()
 
@@ -59,4 +68,12 @@ function TreeMaker:render()
     end
     --tile = gameMap.tiles[1]
     --love.graphics.draw(gameMap.tilesets[tile.tileset].image, tile.quad, 0, 0)
+end
+
+function TreeMaker:checkIfBehind(x, y, obj)
+    if (y + player.height * 3 / 4) > obj.y and y < obj.y + obj.height - 4 and (x < (obj.x + obj.width - 4)) and (x + player.width - 9) > obj.x + 4 then
+        return true
+    else
+        return false
+    end
 end

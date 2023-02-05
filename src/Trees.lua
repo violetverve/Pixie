@@ -48,20 +48,3 @@ function SixTrees:render()
     love.graphics.draw(gameMap.tilesets[tile.tileset].image, tile.quad, self.x, self.y)
 end
 
-
-
---function Tree:update(dt)
---    if (player.y + player.height * 3 / 4) > self.y and player.y < self.y + self.height and (player.x < (self.x + self.width)) and (player.x + player.width) > self.x then
---        self.isPlayerBehind = true
---    else
---        self.isPlayerBehind = false
---    end
---end
---
---function Tree:render()
---    if self.isPlayerBehind then
---        love.graphics.setColor(1,1,1,0.4)
---    end
---    love.graphics.draw(self.image, self.x, self.y)
---    love.graphics.setColor(1,1,1)
---end
