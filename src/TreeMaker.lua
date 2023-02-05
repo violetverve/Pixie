@@ -71,7 +71,7 @@ function TreeMaker:render()
 end
 
 function TreeMaker:checkIfBehind(x, y, obj)
-    if (y + player.height * 3 / 4) > obj.y and y < obj.y + obj.height - 4 and (x < (obj.x + obj.width - 4)) and (x + player.width - 9) > obj.x + 4 then
+    if (y + player.height * 3 / 4) > obj.y + 28 and y < obj.y + obj.height - 4 and (x < (obj.x + obj.width - 4)) and (x + player.width - 9) > obj.x + 4 then
         return true
     else
         return false
