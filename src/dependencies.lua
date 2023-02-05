@@ -11,7 +11,7 @@ vector = require 'libraries/hump/vector'
 
 require 'src/Player'
 require 'src/LightManager'
-require 'Trees'
+require 'src/Trees'
 require 'src/Item'
 require 'src/shaders'
 require 'src/TreeMaker'
