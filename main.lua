@@ -8,7 +8,7 @@ function love.load()
     world:addCollisionClass('Item')
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setTitle('Pixie')
-    gameMap = sti('maps/testMap.lua')
+    gameMap = sti('maps/test_map.lua')
     world:setQueryDebugDrawing(true) 
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -20,7 +20,9 @@ function love.load()
     player = Player()
     apple = Item()
     lightManager = LightManager()
-    tree = Tree(300, 100)
+    --tree = Tree(300, 100)
+    trees = TreeMaker()
+    trees:findTrees()
 
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
@@ -28,7 +30,7 @@ end
 
 function love.update(dt)
     player:update(dt)
-    tree:update(dt)
+    trees:update(dt)
     cam:lookAt(player.x, player.y)
 
     local w = love.graphics.getWidth()
@@ -68,14 +70,18 @@ function love.draw()
     cam:attach()
         -- gameMap:draw()
         gameMap:drawLayer(gameMap.layers['ground'])
-        gameMap:drawLayer(gameMap.layers['trees'])
+        --gameMap:drawLayer(gameMap.layers['trees'])
 
-        tree:render()
+        trees:renderTreesAbove()
         player:render()
+        trees:renderTreesBelow()
+
         apple:render()
-        world:draw()
+        --world:draw()
         lightManager:render()
     cam:detach()
+
+
     -- love.graphics.rectangle("fill", -10, -10, 2000, 2000)
 end
 

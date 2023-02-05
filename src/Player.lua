@@ -9,12 +9,12 @@ function Player:init()
     self.grid = anim8.newGrid( 12, 18, self.spriteSheet:getWidth(), self.spriteSheet:getHeight() )
 
     self.width = 12
-    self.height = 16
+    self.height = 45
  
     self.collider = world:newBSGRectangleCollider(self.x, self.y, 6*6, 7*6, 10)
     self.collider:setCollisionClass('Player')
     self.collider:setFixedRotation(true)
- 
+
     self.animations = {}
     self.animations.down = anim8.newAnimation( self.grid('1-4', 1), 0.1 )
     self.animations.left = anim8.newAnimation( self.grid('1-4', 2), 0.1 )
@@ -109,14 +109,14 @@ function Player:update(dt)
         elseif self.dir == "left" then
             qx = qx - 60
         elseif self.dir == "up" then
-            qy = qy - 60 
+            qy = qy - 60
         elseif self.dir == "down" then
             qy = qy + 60
         end
         -- self.colliders = world:queryCircleArea(qx,  qy, 40, {"Tree"})
         self.colliders = world:queryCircleArea(qx,  qy, 40, {"Item"})
     else
-        self.colliders = {}  
+        self.colliders = {}
     end
 
     if #self.colliders > 0 then
