@@ -70,7 +70,7 @@ function love.draw()
     cam:attach()
         -- gameMap:draw()
         gameMap:drawLayer(gameMap.layers['ground'])
-        --gameMap:drawLayer(gameMap.layers['trees'])
+        gameMap:drawLayer(gameMap.layers['home'])
 
         trees:renderTreesAbove()
         player:render()
