@@ -11,7 +11,7 @@ function TreeMaker:findTrees()
     if gameMap.layers['trees'] then
         for i, obj in pairs(gameMap.layers['trees'].objects) do
             if obj.class == 'BigTree' or obj.class == 'JustTree' then
-                table.insert(self.trees, JustBigTree(obj))
+                table.insert(self.trees, Tree(obj))
             elseif obj.class == 'SixTrees' then
                 table.insert(self.trees, SixTrees(obj))
             end

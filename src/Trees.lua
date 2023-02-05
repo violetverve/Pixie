@@ -1,7 +1,7 @@
 
-JustBigTree = Class{}
+Tree = Class{}
 
-function JustBigTree:init(tree_obj)
+function Tree:init(tree_obj)
     self.x = tree_obj.x
     self.y = tree_obj.y - 128
     self.obj = tree_obj
@@ -14,7 +14,7 @@ function JustBigTree:init(tree_obj)
     self.collider:setType('static')
 end
 
-function JustBigTree:render()
+function Tree:render()
     tile = gameMap.tiles[self.obj.gid]
     love.graphics.draw(gameMap.tilesets[tile.tileset].image, tile.quad, self.x, self.y)
 end
