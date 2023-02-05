@@ -7,7 +7,7 @@ function Item:init()
     self.width = 16
     self.height = 16
 
-    -- self.isTaken = false
+    self.renderAbove = true
 
     self.image = love.graphics.newImage('images/items/apple_red.png')
 
@@ -20,13 +20,21 @@ function Item:init()
 end
 
 function Item:update()
-
+    if self.y + self.height - 4 <= player.y + player.height then
+        self.renderAbove = true
+    else 
+        self.renderAbove = false
+    end
 end
 
-function Item:render()
-    -- self.image.draw()
-    if not self.collider.isTaken then
+function Item:renderItemAbove()
+    if self.renderAbove and not self.collider.isTaken then
         love.graphics.draw(self.image, self.x, self.y, nil, 2.5)
     end
-    -- self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
+end
+
+function Item:renderItemBelow()
+    if not self.renderAbove and not self.collider.isTaken then
+        love.graphics.draw(self.image, self.x, self.y, nil, 2.5)
+    end
 end

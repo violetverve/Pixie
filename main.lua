@@ -31,6 +31,7 @@ end
 function love.update(dt)
     player:update(dt)
     trees:update(dt)
+    apple:update(dt)
     cam:lookAt(player.x, player.y)
 
     local w = love.graphics.getWidth()
@@ -72,17 +73,18 @@ function love.draw()
         gameMap:drawLayer(gameMap.layers['ground'])
         gameMap:drawLayer(gameMap.layers['home'])
 
+
+
         trees:renderTreesAbove()
+        apple:renderItemAbove()
         player:render()
         trees:renderTreesBelow()
+        apple:renderItemBelow()
 
-        apple:render()
-        --world:draw()
+        -- world:draw()
         lightManager:render()
     cam:detach()
 
-
-    -- love.graphics.rectangle("fill", -10, -10, 2000, 2000)
 end
 
 
