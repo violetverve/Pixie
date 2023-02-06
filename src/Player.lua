@@ -3,7 +3,7 @@ Player = Class{}
 
 function Player:init()
     self.x = 400
-    self.y = 200
+    self.y = 1000
     self.speed = 300
     self.spriteSheet = love.graphics.newImage('images/characters/boy-charecter.png')
     self.grid = anim8.newGrid( 12, 18, self.spriteSheet:getWidth(), self.spriteSheet:getHeight() )
@@ -44,15 +44,15 @@ function Player:update(dt)
             qy = qy + 60
         end
         -- self.colliders = world:queryCircleArea(qx,  qy, 40, {"Tree"})
-        self.colliders = world:queryCircleArea(qx,  qy, 40, {"Item"})
+        self.colliders = world:queryCircleArea(qx,  qy, 40, {"Item", 'Door'})
     else
         self.colliders = {}
     end
 
     if #self.colliders > 0 then
         for i,c in ipairs(self.colliders) do
-            if c.class == 'Door' then
-                -- add code here 
+            if c.collision_class == 'Door' then
+                switchMaps('home')
             else 
                 self.backpack[c.type] = self.backpack[c.type] or 0
                 self.backpack[c.type] = self.backpack[c.type] + 1
