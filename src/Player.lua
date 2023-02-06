@@ -51,10 +51,14 @@ function Player:update(dt)
 
     if #self.colliders > 0 then
         for i,c in ipairs(self.colliders) do
-            self.backpack[c.type] = self.backpack[c.type] or 0
-            self.backpack[c.type] = self.backpack[c.type] + 1
-            c.isTaken = true
-            c:destroy()
+            if c.class == 'Door' then
+                -- add code here 
+            else 
+                self.backpack[c.type] = self.backpack[c.type] or 0
+                self.backpack[c.type] = self.backpack[c.type] + 1
+                c.isTaken = true
+                c:destroy()
+            end    
         end
     end
 

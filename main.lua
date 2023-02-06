@@ -6,6 +6,7 @@ function love.load()
     world:addCollisionClass('Tree')
     world:addCollisionClass('Player')
     world:addCollisionClass('Item')
+    world:addCollisionClass('Door')
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setTitle('Pixie')
     gameMap = sti('maps/test_map.lua')
@@ -31,7 +32,7 @@ function love.load()
     -- itemManager:addItem('tomato', 140, 211)
     -- itemManager:addItem('watermelon', 320, 249)
     -- itemManager:addItem('corn', 400, 400)
-
+    createPortal(705, 1090, 63, 125)
     playerBackpack = BackpackManager(player.backpack)
 
     trees = TreeMaker()
@@ -46,7 +47,6 @@ function love.update(dt)
     trees:update(dt)
     -- apple:update(dt)
     cam:lookAt(player.x, player.y)
-
     local w = love.graphics.getWidth()
     local h = love.graphics.getHeight()
 
@@ -98,7 +98,7 @@ function love.draw()
         trees:renderTreesBelow()
         itemManager:renderItemBelow()
 
-        -- world:draw()
+        world:draw()
         lightManager:render()
     cam:detach()
 
@@ -130,6 +130,8 @@ function table.contains(table, element)
 end
 
 function createPortal(x, y, width, height)
-
-
+    door = world:newRectangleCollider(x, y, width, height)
+    door:setCollisionClass('Door')
+    -- door:setFixedRotation(true)
+    door:setType('static')
 end
