@@ -20,16 +20,17 @@ function love.load()
     player = Player()
     lightManager = LightManager()
     itemManager = ItemManager()
-    itemManager:addItem('apple', 100, 200)
-    itemManager:addItem('apple', 300, 300)
-    itemManager:addItem('pear', 230, 120)
-    itemManager:addItem('corn', 185, 400)
-    itemManager:addItem('orange', 132, 103)
-    itemManager:addItem('pomegranate', 174, 302)
-    itemManager:addItem('strawberry', 20, 123)
-    itemManager:addItem('tomato', 140, 211)
-    itemManager:addItem('watermelon', 320, 249)
-    itemManager:addItem('corn', 400, 400)
+    itemManager:addItems({{'apple', 100, 200}, {'apple', 300, 300}, {'pear', 230, 120}})
+    -- itemManager:addItem('apple', 100, 200)
+    -- itemManager:addItem('apple', 300, 300)
+    -- itemManager:addItem('pear', 230, 120)
+    -- itemManager:addItem('corn', 185, 400)
+    -- itemManager:addItem('orange', 132, 103)
+    -- itemManager:addItem('pomegranate', 174, 302)
+    -- itemManager:addItem('strawberry', 20, 123)
+    -- itemManager:addItem('tomato', 140, 211)
+    -- itemManager:addItem('watermelon', 320, 249)
+    -- itemManager:addItem('corn', 400, 400)
 
     playerBackpack = BackpackManager(player.backpack)
 
@@ -126,4 +127,9 @@ function table.contains(table, element)
         end
     end
     return false
+end
+
+function createPortal(x, y, width, height)
+
+
 end

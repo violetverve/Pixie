@@ -24,6 +24,12 @@ function ItemManager:addItem(name, x, y)
     table.insert(self.items[name]['colliders'], collider)
 end
 
+function ItemManager:addItems(objects)
+    for i, val in pairs(objects) do
+        self:addItem(val[1], val[2], val[3])
+    end
+end
+
 function ItemManager:updateColliders()
     for _, value in pairs(self.items) do
         for _, val in pairs(value['colliders']) do
