@@ -10,7 +10,18 @@ world:addCollisionClass('Door')
 activeMap = 'valley'
 gameMaps = {}
 gameMaps.home = MapMaker('maps/houseInside.lua')
-gameMaps.valley = MapMaker('maps/test_map.lua', {{'apple', 100, 200}, {'apple', 300, 300}, {'pear', 230, 120}})
+gameMaps.valley = MapMaker('maps/test_map.lua', {
+    {'apple', 100, 200},
+    {'apple', 300, 300},
+    {'pear', 230, 120},
+    {'corn', 185, 400},
+    {'orange', 132, 103},
+    {'pomegranate', 174, 302},
+    {'strawberry', 20, 123},
+    {'tomato', 140, 211},
+    {'watermelon', 320, 249},
+    {'corn', 400, 400}
+})
 
 
 function love.load()
@@ -29,21 +40,8 @@ function love.load()
 
     player = Player()
     lightManager = LightManager()
-    itemManager = ItemManager({
 
-    })
 
-    --itemManager:addItems({{'apple', 100, 200}, {'apple', 300, 300}, {'pear', 230, 120}})
-    -- itemManager:addItem('apple', 100, 200)
-    -- itemManager:addItem('apple', 300, 300)
-    -- itemManager:addItem('pear', 230, 120)
-    -- itemManager:addItem('corn', 185, 400)
-    -- itemManager:addItem('orange', 132, 103)
-    -- itemManager:addItem('pomegranate', 174, 302)
-    -- itemManager:addItem('strawberry', 20, 123)
-    -- itemManager:addItem('tomato', 140, 211)
-    -- itemManager:addItem('watermelon', 320, 249)
-    -- itemManager:addItem('corn', 400, 400)
     createPortal(705, 1090, 63, 125)
     playerBackpack = BackpackManager(player.backpack)
 
@@ -128,7 +126,7 @@ function love.draw()
         --trees:renderTreesBelow()
         --itemManager:renderItemBelow()
 
-        world:draw()
+        --world:draw()
         --lightManager:render()
     cam:detach()
 
