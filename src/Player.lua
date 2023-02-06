@@ -65,8 +65,6 @@ function Player:update(dt)
 end
 
 function Player:render()
-    -- love.graphics.printf('Score: ' .. tostring(self.id1) .. " ", 0, 10, VIRTUAL_WIDTH, 'center')
-    love.graphics.printf('Apples: ' .. tostring(self.backpack['apple']) .. " ", 0, 50, VIRTUAL_WIDTH, 'center')
     self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
 end
 
