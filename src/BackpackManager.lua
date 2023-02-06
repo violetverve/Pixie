@@ -5,7 +5,7 @@ CELL_WIDTH = 70
 function BackpackManager:init(backpack)
     self.content = backpack
     self.chosen = 0
-    self.keys = {}
+    self.keysPanel = {}
 end
 
 function BackpackManager:update(dt)
@@ -17,8 +17,8 @@ function BackpackManager:update(dt)
     end
 
     for name, _ in pairs(self.content) do
-        if not table.contains(self.keys, name) then
-            table.insert(self.keys, name)
+        if not table.contains(self.keysPanel, name) then
+            table.insert(self.keysPanel, name)
         end
     end
  end
@@ -39,7 +39,7 @@ function BackpackManager:render()
     local i = 1
     local addScale = 0
 
-    for _, name in ipairs(self.keys) do
+    for _, name in ipairs(self.keysPanel) do
         if i == self.chosen then
             addScale = 0.3
         else
