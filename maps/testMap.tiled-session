@@ -7,10 +7,22 @@
     "expandedProjectPaths": [
         "."
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "houseInside.tmx": {
+            "scale": 2,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 167,
+                "y": 122.25
+            }
+        },
+        "houseInside.tmx#houseInside": {
+            "scaleInDock": 3
         },
         "testMap.tmx": {
             "scale": 0.33,
