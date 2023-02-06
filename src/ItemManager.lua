@@ -24,6 +24,27 @@ function ItemManager:addItem(name, x, y)
     table.insert(self.items[name]['colliders'], collider)
 end
 
+function ItemManager:loadColliders()
+    for name, objects in pairs(self.items) do
+        for i, coords in ipairs(objects['xy']) do
+            objects['colliders'][i] = world:newCircleCollider(coords[1] + ITEMS_DEFS[name].width * 1.25, coords[2] + ITEMS_DEFS[name].height * 1.25, ITEMS_DEFS[name].height)
+            objects['colliders'][i]:setCollisionClass('Item')
+            objects['colliders'][i]:setType('static')
+
+            objects['colliders'][i].isTaken = false
+            objects['colliders'][i].type = name
+        end
+    end
+end
+
+function ItemManager:exitColliders()
+    for name, objects in pairs(self.items) do
+        for _, collider in pairs(objects['colliders']) do
+            collider:destroy()
+        end
+    end
+end
+
 function ItemManager:addItems(objects)
     for i, val in pairs(objects) do
         self:addItem(val[1], val[2], val[3])
