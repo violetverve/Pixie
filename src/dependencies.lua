@@ -19,3 +19,4 @@ require 'src/items'
 require 'src/ItemManager'
 
 require 'src/BackpackManager'
+require 'src/MapMaker'

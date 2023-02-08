@@ -1,61 +1,111 @@
 BackpackManager = Class{}
 
-CELL_WIDTH = 70
+CELL_WIDTH = 48
+CELL_HEIGHT = 48
+BACKPACK_IMG = love.graphics.newImage('images/backpack2.png')
+BACKPACK_PANEL_IMG = love.graphics.newImage('images/backpack-panel.png')
+BACKPACK_CHOSEN_IMG = love.graphics.newImage('images/backpack-chosen.png')
+BACKPACK_IN_ROW = 10
 
 function BackpackManager:init(backpack)
     self.content = backpack
-    self.chosen = 0
-    self.keys = {}
+    self.chosen = 1
+    self.keysPanel = {}
+
+    self.openBackpack = false
+    self.keysBackpack = {}
 end
 
 function BackpackManager:update(dt)
     if love.keyboard.wasPressed('a') then
-        self.chosen = self.chosen < 1 and 8 or self.chosen - 1
+        self.chosen = self.chosen < 2 and 10 or self.chosen - 1
     end
     if love.keyboard.wasPressed('d') then
-        self.chosen = self.chosen > 7 and 0 or self.chosen + 1
+        self.chosen = self.chosen > 9 and 1 or self.chosen + 1
+    end
+    if love.keyboard.wasPressed('b') then
+        self.openBackpack = not self.openBackpack
     end
 
     for name, _ in pairs(self.content) do
-        if not table.contains(self.keys, name) then
-            table.insert(self.keys, name)
+        if #self.keysPanel < 10 then
+            if not table.contains(self.keysPanel, name) then
+                table.insert(self.keysPanel, name)
+            end
+        else
+            if not table.contains(self.keysBackpack, name) then
+                table.insert(self.keysBackpack, name)
+            end
         end
     end
+
+
 
     player:updateHoldingItem(self.keys[self.chosen])
 
  end
 
 function BackpackManager:render()
-    love.graphics.setColor(132/255, 24/255 ,28/255)
-    love.graphics.rectangle('fill', (WINDOW_WIDTH / 2) - (CELL_WIDTH + 8) * 4 - 8, WINDOW_HEIGHT - CELL_WIDTH - 8, (CELL_WIDTH + 8) * 8 + 8, CELL_WIDTH + 16)
-    love.graphics.setColor(1, 1, 1)
+    --love.graphics.setColor(132/255, 24/255 ,28/255)
+    --love.graphics.rectangle('fill', (WINDOW_WIDTH / 2) - (CELL_WIDTH + 8) * 4 - 8, WINDOW_HEIGHT - CELL_WIDTH - 8, (CELL_WIDTH + 8) * 8 + 8, CELL_WIDTH + 16)
+    --love.graphics.setColor(1, 1, 1)
+    --
+    --for i = 1, 8 do
+    --    if i == self.chosen then
+    --        love.graphics.setColor(225/255, 162/255, 104/255)
+    --    end
+    --    love.graphics.rectangle('fill', (WINDOW_WIDTH / 2) - (CELL_WIDTH + 8) * (4 - i + 1), WINDOW_HEIGHT - CELL_WIDTH, CELL_WIDTH, CELL_WIDTH)
+    --    love.graphics.setColor(1, 1, 1)
+    --end
+    love.graphics.draw(BACKPACK_PANEL_IMG, WINDOW_WIDTH/2 - BACKPACK_PANEL_IMG:getWidth()/2, WINDOW_HEIGHT - BACKPACK_PANEL_IMG:getHeight())
+    self:drawItemsOnPanel(WINDOW_HEIGHT - BACKPACK_PANEL_IMG:getHeight())
 
-    for i = 1, 8 do
-        if i == self.chosen then
-            love.graphics.setColor(225/255, 162/255, 104/255)
-        end
-        love.graphics.rectangle('fill', (WINDOW_WIDTH / 2) - (CELL_WIDTH + 8) * (4 - i + 1), WINDOW_HEIGHT - CELL_WIDTH, CELL_WIDTH, CELL_WIDTH)
-        love.graphics.setColor(1, 1, 1)
+    if self.openBackpack then
+        self:drawOpenedBackpack()
     end
+end
 
+function BackpackManager:drawItemsOnPanel(y)
     local i = 1
     local addScale = 0
-
-    for _, name in ipairs(self.keys) do
+    local onScaleDiff = 0
+    for _, name in ipairs(self.keysPanel) do
         if i == self.chosen then
-            addScale = 0.3
+            addScale = 0.2
+            onScaleDiff = 2
         else
             addScale = 0
+            onScaleDiff = 0
         end
-        love.graphics.draw(ITEMS_DEFS[name].image, (WINDOW_WIDTH / 2) - (CELL_WIDTH + 8) * (4 - i + 1) + 8, WINDOW_HEIGHT - CELL_WIDTH + 8, nil, 3 + addScale)
+        love.graphics.draw(ITEMS_DEFS[name].image,
+                (WINDOW_WIDTH / 2) - CELL_WIDTH * (6 - i) + 8 - onScaleDiff,
+                y + 12 - onScaleDiff, nil, 2 + addScale)
 
         if self.content[name] > 1 then
             love.graphics.setColor(67/255, 48/255, 31/255)
-            love.graphics.printf(tostring(self.content[name]), (WINDOW_WIDTH / 2) - (CELL_WIDTH + 8) * (4 - i + 1) + CELL_WIDTH - 18, WINDOW_HEIGHT - 18, 18)
+            love.graphics.printf(tostring(self.content[name]),
+                    (WINDOW_WIDTH / 2) - CELL_WIDTH * (6 - i) + CELL_WIDTH - 16,
+                    y + BACKPACK_PANEL_IMG:getHeight() - 24, 18)
             love.graphics.setColor(1, 1, 1)
         end
 
         i = i + 1
+    end
+
+    love.graphics.draw(BACKPACK_CHOSEN_IMG, (WINDOW_WIDTH / 2) - CELL_WIDTH * (6 - self.chosen) - 5, y + 4)
+end
+
+function BackpackManager:drawOpenedBackpack()
+    love.graphics.draw(BACKPACK_IMG, WINDOW_WIDTH / 2 - BACKPACK_IMG:getWidth() / 2, WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight() / 2)
+    self:drawItemsOnPanel(WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight()/2)
+
+    for j = 0, 2 do
+        for i = 1, 10 do
+            if self.keysBackpack[j*10 + i] then
+                love.graphics.draw(ITEMS_DEFS[self.keysBackpack[j*10+i]],
+                WINDOW_WIDTH / 2 - BACKPACK_IMG:getWidth() / 2 + i * CELL_WIDTH + 8,
+                WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight() / 2 + (j+1) * CELL_HEIGHT - 10)
+            end
+        end
     end
 end

@@ -1,19 +1,20 @@
 
 TreeMaker = Class{}
 
-function TreeMaker:init()
+function TreeMaker:init(gameMap)
     self.trees = {}
     self.trees_above = {}
     self.trees_below = {}
+    self:findTrees(gameMap)
 end
 
-function TreeMaker:findTrees()
+function TreeMaker:findTrees(gameMap)
     if gameMap.layers['trees'] then
         for i, obj in pairs(gameMap.layers['trees'].objects) do
             if obj.class == 'BigTree' or obj.class == 'JustTree' then
-                table.insert(self.trees, Tree(obj))
+                table.insert(self.trees, Tree(obj, gameMap))
             elseif obj.class == 'SixTrees' then
-                table.insert(self.trees, SixTrees(obj))
+                table.insert(self.trees, SixTrees(obj, gameMap))
             end
         end
     end
@@ -68,6 +69,18 @@ function TreeMaker:render()
     end
     --tile = gameMap.tiles[1]
     --love.graphics.draw(gameMap.tilesets[tile.tileset].image, tile.quad, 0, 0)
+end
+
+function TreeMaker:loadColliders()
+     for _, tree in ipairs(self.trees) do
+        tree:loadColliders()
+    end
+end
+
+function TreeMaker:exitColliders()
+     for _, tree in ipairs(self.trees) do
+        tree:exitColliders()
+    end
 end
 
 function TreeMaker:checkIfBehind(x, y, obj)
