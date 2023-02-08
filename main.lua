@@ -126,7 +126,7 @@ function love.draw()
         --trees:renderTreesBelow()
         --itemManager:renderItemBelow()
 
-        --world:draw()
+        world:draw()
         --lightManager:render()
     cam:detach()
 

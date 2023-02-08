@@ -38,12 +38,22 @@ function BackpackManager:update(dt)
             end
         end
     end
-
-
-
     player:updateHoldingItem(self.keysPanel[self.chosen])
-
+    self:checkIfThrowItem()
  end
+
+function BackpackManager:checkIfThrowItem()
+    if love.keyboard.wasPressed('t') then
+        if self.keysPanel[self.chosen] ~= nil  then
+            local itemName = self.keysPanel[self.chosen]
+            local itemNumber = self.content[self.keysPanel[self.chosen]]
+            self.content[self.keysPanel[self.chosen]]  = nil
+            table.remove(self.keysPanel, self.chosen)
+            local ix, iy = player:getDirBasedCoordinates({40, -80, -60, 60})
+            gameMaps[activeMap].itemManager:addItem(itemName, ix, iy)
+        end
+    end
+end
 
 function BackpackManager:render()
     --love.graphics.setColor(132/255, 24/255 ,28/255)
