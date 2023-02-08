@@ -72,7 +72,7 @@ function ItemManager:renderItemAbove()
             local x = val[1]
             local y = val[2]
             if y + ITEMS_DEFS[key].height - 4 <= y + player.height then
-                love.graphics.draw(ITEMS_DEFS[key].image, x, y, nil, 2.5)
+                love.graphics.draw(ITEMS_DEFS[key].image, x, y, nil, 1)
             end
         end
     end
@@ -84,7 +84,7 @@ function ItemManager:renderItemBelow()
             local x = val[1]
             local y = val[2]
             if y + ITEMS_DEFS[key].height - 4 > y + player.height then
-                love.graphics.draw(ITEMS_DEFS[key].image, x, y, nil, 2.5)
+                love.graphics.draw(ITEMS_DEFS[key].image, x, y, nil, 1)
             end
         end
     end

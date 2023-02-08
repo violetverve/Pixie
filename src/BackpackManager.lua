@@ -32,7 +32,7 @@ function BackpackManager:update(dt)
             if not table.contains(self.keysPanel, name) then
                 table.insert(self.keysPanel, name)
             end
-        else
+        elseif not table.contains(self.keysPanel, name) then
             if not table.contains(self.keysBackpack, name) then
                 table.insert(self.keysBackpack, name)
             end
@@ -131,10 +131,10 @@ function BackpackManager:drawOpenedBackpack()
     for j = 0, 2 do
         for i = 1, 10 do
             if self.keysBackpack[j*10 + i] then
-                love.graphics.draw(ITEMS_DEFS[self.keysBackpack[j*10+i]],
-                WINDOW_WIDTH / 2 - BACKPACK_IMG:getWidth() / 2 + i * CELL_WIDTH + 8,
-                WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight() / 2 + (j+1) * CELL_HEIGHT - 10)
-            end
+                love.graphics.draw(ITEMS_DEFS[self.keysBackpack[j*10+i]].image,
+                WINDOW_WIDTH / 2 - BACKPACK_IMG:getWidth() / 2 + (i-1) * CELL_WIDTH + 14,
+                WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight() / 2 + (j+1) * CELL_HEIGHT + 14, nil, 2)
+            end 
         end
     end
 end

@@ -21,9 +21,16 @@ gameMaps.valley = MapMaker('maps/valley.lua', {
     {'strawberry', 20, 123},
     {'tomato', 140, 211},
     {'watermelon', 320, 249},
-    {'corn', 400, 400}
+    {'corn', 400, 400},
+    {'beet', 239, 122},
+    {'carrot', 340, 453},
+    {'cherries', 456, 260},
+    {'lemon', 276, 345},
+    {'lettuce', 484, 312},
+    {'pineapple', 168, 296},
+    {'potato', 270, 124}
     },
-    {{50, 50, 63, 125, mapTo = 'home', xy = {1, 1 }}} --doors
+    {{50, 50, 30, 30, mapTo = 'home', xy = {100, 100}}} --doors
 )
 
 function love.load()

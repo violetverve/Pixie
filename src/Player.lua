@@ -40,14 +40,15 @@ function Player:getPosition()
 end
 
 function Player:setPosition(x, y)
-    self.x = x
-    self.y = y
+    self.collider:destroy()
+    self.collider = world:newRectangleCollider(x, y, 8, 3)
+    self.collider:setCollisionClass('Player')
+    self.collider:setFixedRotation(true)
 end
 
 function Player:update(dt)
     self:updateMoving(dt)
     self:updateQuery()
-
 end
 
 function Player:updateQuery()
