@@ -2,6 +2,7 @@
 MapMaker = Class{}
 
 function MapMaker:init(mapPath, items, doors)
+    -- self.name = name
     self.gameMap = sti(mapPath)
     self.objects = {} --managers
     -- self.doors = doors or {}
@@ -45,14 +46,22 @@ function MapMaker:drawAfterPlayer()
     self.treeManager:renderTreesBelow()
 end
 
-function MapMaker:createDoor(x, y, width, height)
+function MapMaker:createDoor(x, y, width, height, mapTo, xyTo)
     door = world:newRectangleCollider(x, y, width, height)
     door:setCollisionClass('Door')
     door:setType('static')
+    door.mapTo = mapTo
+    door.xyTo = xyTo
 end
 
 function MapMaker:createDoors(doors)
     for i, door in pairs(doors) do
-        self:createDoor(door[1], door[2], door[3], door[4])
+        self:createDoor(door[1], door[2], door[3], door[4], door.mapTo, door.xy  )
     end
+end
+
+function MapMaker:switchMaps(newMap)
+    gameMaps[activeMap]:exit()
+    activeMap = newMap
+    gameMaps[activeMap]:load()
 end

@@ -55,15 +55,16 @@ function Player:updateQuery()
 
     for i,c in ipairs(self.colliders) do
         if c.collision_class == 'Door' then
-            self:doorDetected()
+            self:doorDetected(c)
         elseif c.collision_class == 'Item' then
             self:itemDetected(c)
         end    
     end
 end
 
-function Player:doorDetected()
-    switchMaps('home')
+function Player:doorDetected(collider)
+    self:setPosition(collider.xyTo[1], collider.xyTo[2])
+    gameMaps[activeMap]:switchMaps(collider.mapTo)
 end
 
 function Player:itemDetected(collider)
