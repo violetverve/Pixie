@@ -21,15 +21,14 @@ gameMaps.valley = MapMaker('maps/test_map.lua', {
     {'tomato', 140, 211},
     {'watermelon', 320, 249},
     {'corn', 400, 400}
-})
-
+    },
+    {{705, 1090, 63, 125}} --doors
+)
 
 function love.load()
     cam = camera()
-
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setTitle('Pixie')
-
     world:setQueryDebugDrawing(true) 
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -41,8 +40,7 @@ function love.load()
     player = Player()
     lightManager = LightManager()
 
-
-    createPortal(705, 1090, 63, 125)
+    -- createPortal(705, 1090, 63, 125)
     playerBackpack = BackpackManager(player.backpack)
 
     gameMaps[activeMap]:load()
@@ -59,11 +57,13 @@ function love.update(dt)
 
     gameMaps[activeMap]:update(dt)
     player:update(dt)
-    --trees:update(dt)
-    -- apple:update(dt)
     cam:lookAt(player.x, player.y)
+    world:update(dt)
+    playerBackpack:update(dt)
+
     local w = love.graphics.getWidth()
     local h = love.graphics.getHeight()
+    
 
     -- left side limit for camera
     if cam.x < w/2 then
@@ -88,11 +88,6 @@ function love.update(dt)
         cam.y = (mapH -h/2)
     end
 
-    -- lightManager:update(dt)
-    --itemManager:update()
-    world:update(dt)
-    playerBackpack:update(dt)
-
     if love.keyboard.wasPressed('g') then
         switchMaps('home')
     end
@@ -115,17 +110,9 @@ function love.draw()
     --    gameMap2:drawLayer(gameMap2.layers['Decoration'])
     --end
 
-        --trees:renderTreesAbove()
-        -- apple:renderItemAbove()
-        --itemManager:renderItemAbove()
-
         gameMaps[activeMap]:drawBeforePlayer()
         player:render()
         gameMaps[activeMap]:drawAfterPlayer()
-
-        --trees:renderTreesBelow()
-        --itemManager:renderItemBelow()
-
         world:draw()
         --lightManager:render()
     cam:detach()
@@ -155,13 +142,6 @@ function table.contains(table, element)
         end
     end
     return false
-end
-
-function createPortal(x, y, width, height)
-    door = world:newRectangleCollider(x, y, width, height)
-    door:setCollisionClass('Door')
-    -- door:setFixedRotation(true)
-    door:setType('static')
 end
 
 function switchMaps(newMapName)
