@@ -41,28 +41,36 @@ end
 
 function Player:update(dt)
     self:updateMoving(dt)
+    self:updateQuery()
+ 
+end
 
+function Player:updateQuery()
     if love.keyboard.wasPressed('space') then
-        -- position of the query circle
         local qx, qy = self:getDirBasedCoordinates({60, -60, -30, 60}) 
         self.colliders = world:queryCircleArea(qx,  qy, 30, {"Item", 'Door'})
     else
         self.colliders = {}
     end
 
-    if #self.colliders > 0 then
-        for i,c in ipairs(self.colliders) do
-            if c.collision_class == 'Door' then
-                switchMaps('home')
-            else 
-                self.backpack[c.type] = self.backpack[c.type] or 0
-                self.backpack[c.type] = self.backpack[c.type] + 1
-                c.isTaken = true
-                c:destroy()
-            end    
-        end
+    for i,c in ipairs(self.colliders) do
+        if c.collision_class == 'Door' then
+            self:doorDetected()
+        elseif c.collision_class == 'Item' then
+            self:itemDetected(c)
+        end    
     end
+end
 
+function Player:doorDetected()
+    switchMaps('home')
+end
+
+function Player:itemDetected(collider)
+    self.backpack[collider.type] = self.backpack[collider.type] or 0
+    self.backpack[collider.type] = self.backpack[collider.type] + 1
+    collider.isTaken = true
+    collider:destroy()
 end
 
 function Player:updateHoldingItem(item)
@@ -84,7 +92,6 @@ function Player:getDirBasedCoordinates(params)
     end
     return qx, qy
 end
-
 
 function Player:renderBeforePlayer()
     if self.dir == 'up' and self.holdingItem.name ~= nil  then
