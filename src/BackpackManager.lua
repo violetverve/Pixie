@@ -41,7 +41,7 @@ function BackpackManager:update(dt)
 
 
 
-    player:updateHoldingItem(self.keys[self.chosen])
+    player:updateHoldingItem(self.keysPanel[self.chosen])
 
  end
 
