@@ -26,6 +26,17 @@ function Player:init()
     self.dir = "right"
     self.colliders = {}
     self.backpack = {}
+
+    self.holdingItem = {}
+end
+
+function Player:getPosition()
+    return self.x, self.y
+end
+
+function Player:setPosition(x, y)
+    self.x = x
+    self.y = y
 end
 
 function Player:update(dt)
@@ -64,10 +75,38 @@ function Player:update(dt)
 
 end
 
+function Player:updateHoldingItem(item)
+    local qx, qy = self:getPosition()
+    if self.dir == "right" then
+        qx = qx - 5
+    elseif self.dir == "left" then
+        qx = qx - 35
+    elseif self.dir == "up" then
+        qy = qy - 10
+    elseif self.dir == "down" then
+        qy = qy - 5
+    end
+    self.holdingItem.name = item
+    self.holdingItem.x = qx
+    self.holdingItem.y = qy
+end
+
+function Player:renderBeforePlayer()
+    if self.dir == 'up' and self.holdingItem.name ~= nil  then
+        love.graphics.draw(ITEMS_DEFS[self.holdingItem.name].image, self.holdingItem.x, self.holdingItem.y, nil, 2.5)
+    end
+end
+
+function Player:renderAfterPlayer()
+    if self.dir ~= 'up' and self.holdingItem.name ~= nil then
+        love.graphics.draw(ITEMS_DEFS[self.holdingItem.name].image, self.holdingItem.x, self.holdingItem.y, nil, 2.5)
+    end
+end
+
 function Player:render()
-    -- love.graphics.printf('Score: ' .. tostring(self.id1) .. " ", 0, 10, VIRTUAL_WIDTH, 'center')
-    love.graphics.printf('Apples: ' .. tostring(self.backpack['apple']) .. " ", 0, 50, VIRTUAL_WIDTH, 'center')
+    self:renderBeforePlayer()
     self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
+    self:renderAfterPlayer()
 end
 
 function Player:updateMoving(dt)

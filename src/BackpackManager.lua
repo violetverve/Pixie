@@ -21,6 +21,9 @@ function BackpackManager:update(dt)
             table.insert(self.keys, name)
         end
     end
+
+    player:updateHoldingItem(self.keys[self.chosen])
+
  end
 
 function BackpackManager:render()
