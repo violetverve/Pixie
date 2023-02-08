@@ -3,7 +3,7 @@ Player = Class{}
 
 function Player:init()
     self.x = 400
-    self.y = 1000
+    self.y = 300
     self.speed = 300
     self.spriteSheet = love.graphics.newImage('images/characters/boy-charecter.png')
     self.grid = anim8.newGrid( 12, 18, self.spriteSheet:getWidth(), self.spriteSheet:getHeight() )
@@ -41,54 +41,57 @@ end
 
 function Player:update(dt)
     self:updateMoving(dt)
+    self:updateQuery()
+ 
+end
 
+function Player:updateQuery()
     if love.keyboard.wasPressed('space') then
-        -- position of the query circle
-        local qx, qy = player.collider:getPosition()
-        if self.dir == "right" then
-            qx = qx + 60
-        elseif self.dir == "left" then
-            qx = qx - 60
-        elseif self.dir == "up" then
-            qy = qy - 60
-        elseif self.dir == "down" then
-            qy = qy + 60
-        end
-        -- self.colliders = world:queryCircleArea(qx,  qy, 40, {"Tree"})
-        self.colliders = world:queryCircleArea(qx,  qy, 40, {"Item", 'Door'})
+        local qx, qy = self:getDirBasedCoordinates({60, -60, -30, 60}) 
+        self.colliders = world:queryCircleArea(qx,  qy, 30, {"Item", 'Door'})
     else
         self.colliders = {}
     end
 
-    if #self.colliders > 0 then
-        for i,c in ipairs(self.colliders) do
-            if c.collision_class == 'Door' then
-                switchMaps('home')
-            else 
-                self.backpack[c.type] = self.backpack[c.type] or 0
-                self.backpack[c.type] = self.backpack[c.type] + 1
-                c.isTaken = true
-                c:destroy()
-            end    
-        end
+    for i,c in ipairs(self.colliders) do
+        if c.collision_class == 'Door' then
+            self:doorDetected(c)
+        elseif c.collision_class == 'Item' then
+            self:itemDetected(c)
+        end    
     end
+end
 
+function Player:doorDetected(collider)
+    self:setPosition(collider.xyTo[1], collider.xyTo[2])
+    gameMaps[activeMap]:switchMaps(collider.mapTo)
+end
+
+function Player:itemDetected(collider)
+    self.backpack[collider.type] = self.backpack[collider.type] or 0
+    self.backpack[collider.type] = self.backpack[collider.type] + 1
+    collider.isTaken = true
+    collider:destroy()
 end
 
 function Player:updateHoldingItem(item)
+    self.holdingItem.name = item
+    self.holdingItem.x, self.holdingItem.y = self:getDirBasedCoordinates({-5, -35, -10, -5})
+end
+
+function Player:getDirBasedCoordinates(params)
+    -- right, left, up, down 
     local qx, qy = self:getPosition()
     if self.dir == "right" then
-        qx = qx - 5
+        qx = qx + params[1]
     elseif self.dir == "left" then
-        qx = qx - 35
+        qx = qx + params[2]
     elseif self.dir == "up" then
-        qy = qy - 10
+        qy = qy + params[3]
     elseif self.dir == "down" then
-        qy = qy - 5
+        qy = qy + params[4]
     end
-    self.holdingItem.name = item
-    self.holdingItem.x = qx
-    self.holdingItem.y = qy
+    return qx, qy
 end
 
 function Player:renderBeforePlayer()

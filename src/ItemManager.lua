@@ -53,7 +53,7 @@ end
 
 function ItemManager:updateColliders()
     for _, value in pairs(self.items) do
-        for _, val in pairs(value['colliders']) do
+        for i, val in pairs(value['colliders']) do
             if val.isTaken then
                 table.remove(value['colliders'], i)
                 table.remove(value['xy'], i)

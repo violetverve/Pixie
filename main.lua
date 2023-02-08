@@ -21,15 +21,14 @@ gameMaps.valley = MapMaker('maps/test_map.lua', {
     {'tomato', 140, 211},
     {'watermelon', 320, 249},
     {'corn', 400, 400}
-})
-
+    },
+    {{705, 1090, 63, 125, mapTo = 'home', xy = {1, 1 }}} --doors
+)
 
 function love.load()
     cam = camera()
-
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setTitle('Pixie')
-
     world:setQueryDebugDrawing(true) 
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -40,11 +39,7 @@ function love.load()
 
     player = Player()
     lightManager = LightManager()
-
-
-    createPortal(705, 1090, 63, 125)
     playerBackpack = BackpackManager(player.backpack)
-
     gameMaps[activeMap]:load()
 
     love.keyboard.keysPressed = {}
@@ -57,48 +52,20 @@ function love.update(dt)
     --    mapNum = 1
     --end
 
-    gameMaps[activeMap]:update(dt)
     player:update(dt)
-    --trees:update(dt)
-    -- apple:update(dt)
     cam:lookAt(player.x, player.y)
-    local w = love.graphics.getWidth()
-    local h = love.graphics.getHeight()
-
-    -- left side limit for camera
-    if cam.x < w/2 then
-        cam.x = w/2
-    end
-
-    -- top limit for camera
-    if cam.y < h/2 then
-        cam.y = h/2
-    end
-
-    local mapW = MAP_WIDTH --gameMaps[activeMap].gameMap.width * gameMaps[activeMap].gameMap.tilewidth
-    local mapH = MAP_HEIGHT --gameMaps[activeMap].gameMap.height * gameMaps[activeMap].gameMap.tileheight
-
-    -- right side limit for camera
-    if cam.x > (mapW - w/2) then
-        cam.x = (mapW - w/2) 
-    end
-
-    -- bottom limit for camera
-    if cam.y > (mapH -h/2) then
-        cam.y = (mapH -h/2)
-    end
-
-    -- lightManager:update(dt)
-    --itemManager:update()
     world:update(dt)
     playerBackpack:update(dt)
+    cameraUpdate() 
+    gameMaps[activeMap]:update(dt)
 
     if love.keyboard.wasPressed('g') then
-        switchMaps('home')
+        switchMaps('home') 
     end
     if love.keyboard.wasPressed('f') then
         switchMaps('valley')
     end
+    
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
 end
@@ -114,20 +81,10 @@ function love.draw()
     --    gameMap2:drawLayer(gameMap2.layers['Furniture'])
     --    gameMap2:drawLayer(gameMap2.layers['Decoration'])
     --end
-
-        --trees:renderTreesAbove()
-        -- apple:renderItemAbove()
-        --itemManager:renderItemAbove()
-
         gameMaps[activeMap]:drawBeforePlayer()
         player:render()
         gameMaps[activeMap]:drawAfterPlayer()
-
-        --trees:renderTreesBelow()
-        --itemManager:renderItemBelow()
-
-        --world:draw()
-        --lightManager:render()
+        world:draw()
     cam:detach()
 
     playerBackpack:render()
@@ -135,7 +92,6 @@ end
 
 
 function love.keyboard.wasPressed(key)
-
     return love.keyboard.keysPressed[key]
 end
 
@@ -157,15 +113,33 @@ function table.contains(table, element)
     return false
 end
 
-function createPortal(x, y, width, height)
-    door = world:newRectangleCollider(x, y, width, height)
-    door:setCollisionClass('Door')
-    -- door:setFixedRotation(true)
-    door:setType('static')
-end
+-- function switchMaps(newMapName)
+--     gameMaps[activeMap]:exit()
+--     activeMap = newMapName
+--     gameMaps[activeMap]:load()
+-- end
 
-function switchMaps(newMapName)
-    gameMaps[activeMap]:exit()
-    activeMap = newMapName
-    gameMaps[activeMap]:load()
+function cameraUpdate()
+    local w = love.graphics.getWidth()
+    local h = love.graphics.getHeight()
+    
+    local mapW = MAP_WIDTH
+    local mapH = MAP_HEIGHT
+
+    -- left side limit for camera
+    if cam.x < w/2 then
+        cam.x = w/2
+    end
+    -- top limit for camera
+    if cam.y < h/2 then
+        cam.y = h/2
+    end
+    -- right side limit for camera
+    if cam.x > (mapW - w/2) then
+        cam.x = (mapW - w/2) 
+    end
+    -- bottom limit for camera
+    if cam.y > (mapH -h/2) then
+        cam.y = (mapH -h/2)
+    end
 end
