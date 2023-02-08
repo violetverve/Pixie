@@ -2,24 +2,29 @@
 Player = Class{}
 
 function Player:init()
-    self.x = 400
-    self.y = 300
-    self.speed = 300
-    self.spriteSheet = love.graphics.newImage('images/characters/boy-charecter.png')
-    self.grid = anim8.newGrid( 12, 18, self.spriteSheet:getWidth(), self.spriteSheet:getHeight() )
+    self.x = 1
+    self.y = 1
+    self.speed = 50
+    self.spriteSheet = love.graphics.newImage('images/characters/boy-lua-character.png')
+    self.grid = {}
+    self.grid.down = anim8.newGrid( 15, 23, self.spriteSheet:getWidth(), self.spriteSheet:getHeight(), 0, 4, 1 )
+    self.grid.right = anim8.newGrid( 15, 23, self.spriteSheet:getWidth(), self.spriteSheet:getHeight(), 0, 37, 1 )
+    self.grid.up = anim8.newGrid( 15, 23, self.spriteSheet:getWidth(), self.spriteSheet:getHeight(), -1, 68, 1 )
+    self.grid.left = anim8.newGrid( 15, 23, self.spriteSheet:getWidth(), self.spriteSheet:getHeight(), 0, 101, 1 )
 
-    self.width = 12
-    self.height = 45
+
+    self.width = 15
+    self.height = 23
  
-    self.collider = world:newBSGRectangleCollider(self.x, self.y, 6*6, 4*6, 7)
+    self.collider = world:newRectangleCollider(self.x, self.y, 8, 3)
     self.collider:setCollisionClass('Player')
     self.collider:setFixedRotation(true)
 
     self.animations = {}
-    self.animations.down = anim8.newAnimation( self.grid('1-4', 1), 0.1 )
-    self.animations.left = anim8.newAnimation( self.grid('1-4', 2), 0.1 )
-    self.animations.right = anim8.newAnimation( self.grid('1-4', 3), 0.1 )
-    self.animations.up = anim8.newAnimation( self.grid('1-4', 4), 0.1 )
+    self.animations.down = anim8.newAnimation( self.grid.down('1-4', 1), 0.1 )
+    self.animations.left = anim8.newAnimation( self.grid.left('1-4', 1), 0.1 )
+    self.animations.right = anim8.newAnimation( self.grid.right('1-4', 1), 0.1 )
+    self.animations.up = anim8.newAnimation( self.grid.up('1-4', 1), 0.1 )
 
     self.anim = self.animations.down
 
@@ -42,12 +47,12 @@ end
 function Player:update(dt)
     self:updateMoving(dt)
     self:updateQuery()
- 
+
 end
 
 function Player:updateQuery()
     if love.keyboard.wasPressed('space') then
-        local qx, qy = self:getDirBasedCoordinates({60, -60, -30, 60}) 
+        local qx, qy = self:getDirBasedCoordinates({60, -60, -30, 60})
         self.colliders = world:queryCircleArea(qx,  qy, 30, {"Item", 'Door'})
     else
         self.colliders = {}
@@ -58,7 +63,7 @@ function Player:updateQuery()
             self:doorDetected(c)
         elseif c.collision_class == 'Item' then
             self:itemDetected(c)
-        end    
+        end
     end
 end
 
@@ -80,7 +85,7 @@ function Player:updateHoldingItem(item)
 end
 
 function Player:getDirBasedCoordinates(params)
-    -- right, left, up, down 
+    -- right, left, up, down
     local qx, qy = self:getPosition()
     if self.dir == "right" then
         qx = qx + params[1]
@@ -108,7 +113,7 @@ end
 
 function Player:render()
     self:renderBeforePlayer()
-    self.anim:draw(player.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
+    self.anim:draw(player.spriteSheet, self.x, self.y)
     self:renderAfterPlayer()
 end
 
@@ -147,41 +152,45 @@ function Player:updateMoving(dt)
     end
 
     if not isMoving then
-        self.anim:gotoFrame(2)
+        self.anim:gotoFrame(1)
     end
 
     -- diagonal walk fixed by normalization of vector
     vec = vector(vx, vy):normalized() * player.speed
     self.collider:setLinearVelocity(vec.x, vec.y)
 
-    self.x = self.collider:getX()
-    self.y = self.collider:getY() - 30
+    self.x = self.collider:getX() - 7
+    self.y = self.collider:getY() - self.height + 4
     self.anim:update(dt)
 
+
+    local mapW = gameMaps[activeMap].gameMap.width * gameMaps[activeMap].gameMap.tilewidth
+    local mapH = gameMaps[activeMap].gameMap.height * gameMaps[activeMap].gameMap.tileheight
+
     -- map borders provider
-    if self.y <= 0 + 8*6 then
+    if self.y <= 0 then
         self.collider:setLinearVelocity(vx, math.max(0, vy))
     end
-    if self.y >= MAP_HEIGHT - 8*6 then
+    if self.y >= mapH - self.height then
         self.collider:setLinearVelocity(vx, math.min(0, vy))
     end
-    if self.x <= 0 + 5*6 then
+    if self.x <= 0 then
         self.collider:setLinearVelocity(math.max(0, vx), vy)
     end
-    if self.x >= MAP_WIDTH - 5*6 then
+    if self.x >= mapW - self.width then
         self.collider:setLinearVelocity(math.min(0, vx), vy)
     end
     --corners
-    if self.y <= 0 + 8*6 and self.x <= 0 + 5*6 then
+    if self.y <= 0 and self.x <= 0 then
         self.collider:setLinearVelocity(math.max(0, vx), math.max(0, vy))
     end
-    if self.y >= MAP_HEIGHT - 8*6 and self.x <= 0 + 5*6 then
+    if self.y >= mapH - self.height and self.x <= 0 then
         self.collider:setLinearVelocity(math.max(0, vx), math.min(0, vy))
     end
-    if self.y <= 0 + 8*6 and self.x >= MAP_WIDTH - 5*6 then
+    if self.y <= 0 and self.x >= mapW - self.width then
         self.collider:setLinearVelocity(math.min(0, vx), math.max(0, vy))
     end
-    if self.y >= MAP_HEIGHT - 8*6 and self.x >= MAP_WIDTH - 5*6 then
+    if self.y >= mapH - self.height and self.x >= mapW - self.width then
         self.collider:setLinearVelocity(math.min(0, vx),  math.min(0, vy))
     end
 end

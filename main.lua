@@ -1,5 +1,6 @@
 require 'src/dependencies'
 gameTimer = 0
+scale = 4
 
 world = wf.newWorld(0, 0)
 world:addCollisionClass('Tree')
@@ -10,7 +11,7 @@ world:addCollisionClass('Door')
 activeMap = 'valley'
 gameMaps = {}
 gameMaps.home = MapMaker('maps/houseInside.lua')
-gameMaps.valley = MapMaker('maps/test_map.lua', {
+gameMaps.valley = MapMaker('maps/valley.lua', {
     {'apple', 100, 200},
     {'apple', 300, 300},
     {'pear', 230, 120},
@@ -22,7 +23,7 @@ gameMaps.valley = MapMaker('maps/test_map.lua', {
     {'watermelon', 320, 249},
     {'corn', 400, 400}
     },
-    {{705, 1090, 63, 125, mapTo = 'home', xy = {1, 1 }}} --doors
+    {{50, 50, 63, 125, mapTo = 'home', xy = {1, 1 }}} --doors
 )
 
 function love.load()
@@ -31,11 +32,13 @@ function love.load()
     love.window.setTitle('Pixie')
     world:setQueryDebugDrawing(true) 
 
-    push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
-        vsync = true,
-        fullscreen = false,
-        resizable = true
-    })
+    --push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
+    --    vsync = true,
+    --    fullscreen = false,
+    --    resizable = true
+    --})
+
+    love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, borderless = false})
 
     player = Player()
     lightManager = LightManager()
@@ -56,16 +59,16 @@ function love.update(dt)
     cam:lookAt(player.x, player.y)
     world:update(dt)
     playerBackpack:update(dt)
-    cameraUpdate() 
+    cameraUpdate()
     gameMaps[activeMap]:update(dt)
 
     if love.keyboard.wasPressed('g') then
-        switchMaps('home') 
+        gameMaps[activeMap]:switchMaps('home')
     end
     if love.keyboard.wasPressed('f') then
-        switchMaps('valley')
+        gameMaps[activeMap]:switchMaps('valley')
     end
-    
+
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
 end
@@ -120,12 +123,20 @@ end
 -- end
 
 function cameraUpdate()
-    local w = love.graphics.getWidth()
-    local h = love.graphics.getHeight()
-    
-    local mapW = MAP_WIDTH
-    local mapH = MAP_HEIGHT
+    local w = love.graphics.getWidth()/scale
+    local h = love.graphics.getHeight()/scale
 
+    local mapW = gameMaps[activeMap].gameMap.width * gameMaps[activeMap].gameMap.tilewidth
+    local mapH = gameMaps[activeMap].gameMap.height * gameMaps[activeMap].gameMap.tileheight
+
+    -- right side limit for camera
+    if cam.x > (mapW - w/2) then
+        cam.x = (mapW - w/2)
+    end
+    -- bottom limit for camera
+    if cam.y > (mapH -h/2) then
+        cam.y = (mapH -h/2)
+    end
     -- left side limit for camera
     if cam.x < w/2 then
         cam.x = w/2
@@ -134,12 +145,6 @@ function cameraUpdate()
     if cam.y < h/2 then
         cam.y = h/2
     end
-    -- right side limit for camera
-    if cam.x > (mapW - w/2) then
-        cam.x = (mapW - w/2) 
-    end
-    -- bottom limit for camera
-    if cam.y > (mapH -h/2) then
-        cam.y = (mapH -h/2)
-    end
+
+    cam:zoomTo(scale)
 end
