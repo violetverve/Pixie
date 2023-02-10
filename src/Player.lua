@@ -102,13 +102,13 @@ end
 
 function Player:renderBeforePlayer()
     if self.dir == 'up' and self.holdingItem.name ~= nil  then
-        love.graphics.draw(ITEMS_DEFS[self.holdingItem.name].image, self.holdingItem.x, self.holdingItem.y, nil, 2.5)
+        love.graphics.draw(ITEMS_DEFS[self.holdingItem.name].image, self.holdingItem.x, self.holdingItem.y, nil, 0.625)
     end
 end
 
 function Player:renderAfterPlayer()
     if self.dir ~= 'up' and self.holdingItem.name ~= nil then
-        love.graphics.draw(ITEMS_DEFS[self.holdingItem.name].image, self.holdingItem.x, self.holdingItem.y, nil, 2.5)
+        love.graphics.draw(ITEMS_DEFS[self.holdingItem.name].image, self.holdingItem.x, self.holdingItem.y, nil,  0.625)
     end
 end
 

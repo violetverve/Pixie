@@ -2,6 +2,7 @@ ItemManager = Class{}
 
 function ItemManager:init()
     self.items = {}
+    self.scale = 0.625 --  16x16 pixrels to 10x10
 end
 
 function ItemManager:addItem(name, x, y)
@@ -11,13 +12,11 @@ function ItemManager:addItem(name, x, y)
     table.insert(self.items[name]['xy'], {x, y})
 
     if ITEMS_DEFS[name].colliderType == 'circle' then
-        collider = world:newCircleCollider(x + ITEMS_DEFS[name].width * 1.25, y + ITEMS_DEFS[name].height * 1.25, ITEMS_DEFS[name].height)
+        collider = world:newCircleCollider(x + ITEMS_DEFS[name].width*self.scale/2, y + ITEMS_DEFS[name].height*self.scale/2, ITEMS_DEFS[name].height*self.scale/2.3)
     end
     -- add other types :D
-
     collider:setCollisionClass('Item')
     collider:setType('static')
-
     collider.isTaken = false
     collider.type = name
 
@@ -27,15 +26,24 @@ end
 function ItemManager:loadColliders()
     for name, objects in pairs(self.items) do
         for i, coords in ipairs(objects['xy']) do
-            objects['colliders'][i] = world:newCircleCollider(coords[1] + ITEMS_DEFS[name].width * 1.25, coords[2] + ITEMS_DEFS[name].height * 1.25, ITEMS_DEFS[name].height)
+            objects['colliders'][i] = world:newCircleCollider(coords[1] + ITEMS_DEFS[name].width*self.scale/2, coords[2] + ITEMS_DEFS[name].height*self.scale/2, ITEMS_DEFS[name].height*self.scale/2.3)
             objects['colliders'][i]:setCollisionClass('Item')
             objects['colliders'][i]:setType('static')
-
             objects['colliders'][i].isTaken = false
             objects['colliders'][i].type = name
         end
     end
 end
+
+-- function ItemManager:createItemCollider(x, y)
+--     i = #objects['colliders']
+--     objects['colliders'][i] = world:newCircleCollider(x + ITEMS_DEFS[name].width*self.scale/2,
+--      y +\ ITEMS_DEFS[name].height*self.scale/2, ITEMS_DEFS[name].height*self.scale/2.3)
+--     objects['colliders'][i]:setCollisionClass('Item')
+--     objects['colliders'][i]:setType('static')
+--     objects['colliders'][i].isTaken = false
+--     objects['colliders'][i].type = name
+-- end
 
 function ItemManager:exitColliders()
     for name, objects in pairs(self.items) do
@@ -72,7 +80,7 @@ function ItemManager:renderItemAbove()
             local x = val[1]
             local y = val[2]
             if y + ITEMS_DEFS[key].height - 4 <= y + player.height then
-                love.graphics.draw(ITEMS_DEFS[key].image, x, y, nil, 1)
+                love.graphics.draw(ITEMS_DEFS[key].image, x, y, nil, self.scale)
             end
         end
     end
@@ -84,7 +92,7 @@ function ItemManager:renderItemBelow()
             local x = val[1]
             local y = val[2]
             if y + ITEMS_DEFS[key].height - 4 > y + player.height then
-                love.graphics.draw(ITEMS_DEFS[key].image, x, y, nil, 1)
+                love.graphics.draw(ITEMS_DEFS[key].image, x, y, nil, self.scale)
             end
         end
     end
