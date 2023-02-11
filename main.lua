@@ -30,7 +30,7 @@ gameMaps.valley = MapMaker('maps/valley.lua', {
     {'pineapple', 168, 296},
     {'potato', 270, 124}
     },
-    {{50, 50, 30, 30, mapTo = 'home', xy = {100, 100}}} --doors
+    {{512, 106, 16, 16, mapTo = 'home', xy = {155, 300}}} --doors
 )
 
 function love.load()

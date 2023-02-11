@@ -2,8 +2,8 @@
 Player = Class{}
 
 function Player:init()
-    self.x = 100
-    self.y = 100
+    self.x = 500
+    self.y = 150
     self.speed = 50
     self.spriteSheet = love.graphics.newImage('images/characters/boy-lua-character.png')
     self.grid = {}
