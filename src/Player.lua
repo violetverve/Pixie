@@ -2,8 +2,8 @@
 Player = Class{}
 
 function Player:init()
-    self.x = 1
-    self.y = 1
+    self.x = 100
+    self.y = 100
     self.speed = 50
     self.spriteSheet = love.graphics.newImage('images/characters/boy-lua-character.png')
     self.grid = {}
@@ -19,7 +19,7 @@ function Player:init()
     self.collider = world:newRectangleCollider(self.x, self.y, 8, 3)
     self.collider:setCollisionClass('Player')
     self.collider:setFixedRotation(true)
-
+ 
     self.animations = {}
     self.animations.down = anim8.newAnimation( self.grid.down('1-4', 1), 0.1 )
     self.animations.left = anim8.newAnimation( self.grid.left('1-4', 1), 0.1 )
@@ -53,8 +53,9 @@ end
 
 function Player:updateQuery()
     if love.keyboard.wasPressed('space') then
-        local qx, qy = self:getDirBasedCoordinates({60, -60, -30, 60})
-        self.colliders = world:queryCircleArea(qx,  qy, 30, {"Item", 'Door'})
+        local r, h, w = 10, self.height, self.width
+        local qx, qy = self:getDirBasedCoordinates({{w+r, h/2}, {-r, h/2}, {w/2, 0}, {w/2, h+r}})
+        self.colliders = world:queryCircleArea(qx,  qy, r, {"Item", 'Door'})
     else
         self.colliders = {}
     end
@@ -82,33 +83,42 @@ end
 
 function Player:updateHoldingItem(item)
     self.holdingItem.name = item
-    self.holdingItem.x, self.holdingItem.y = self:getDirBasedCoordinates({-5, -35, -10, -5})
+    if self.holdingItem.name ~= nil then
+        local h, w = self.height, self.width
+        local ih, iw = ITEMS_DEFS[item].height, ITEMS_DEFS[item].width
+        self.holdingItem.x, self.holdingItem.y = self:getDirBasedCoordinates({{w/2.6, h/2}, {0, h/2}, {w/1.5, h/2.5}, {0, h/2}})
+        self.holdingItem.scale = 0.5
+    end
 end
 
 function Player:getDirBasedCoordinates(params)
     -- right, left, up, down
     local qx, qy = self:getPosition()
     if self.dir == "right" then
-        qx = qx + params[1]
+        qx = qx + params[1][1]
+        qy = qy + params[1][2]
     elseif self.dir == "left" then
-        qx = qx + params[2]
+        qx = qx + params[2][1]
+        qy = qy + params[2][2]
     elseif self.dir == "up" then
-        qy = qy + params[3]
+        qx = qx + params[3][1]
+        qy = qy + params[3][2]
     elseif self.dir == "down" then
-        qy = qy + params[4]
+        qx = qx + params[4][1]
+        qy = qy + params[4][2]
     end
     return qx, qy
 end
 
 function Player:renderBeforePlayer()
-    if self.dir == 'up' and self.holdingItem.name ~= nil  then
-        love.graphics.draw(ITEMS_DEFS[self.holdingItem.name].image, self.holdingItem.x, self.holdingItem.y, nil, 0.625)
+    if self.dir == 'up' and self.holdingItem.name ~= nil then
+        love.graphics.draw(ITEMS_DEFS[self.holdingItem.name].image, self.holdingItem.x, self.holdingItem.y, nil, self.holdingItem.scale)
     end
 end
 
 function Player:renderAfterPlayer()
     if self.dir ~= 'up' and self.holdingItem.name ~= nil then
-        love.graphics.draw(ITEMS_DEFS[self.holdingItem.name].image, self.holdingItem.x, self.holdingItem.y, nil,  0.625)
+        love.graphics.draw(ITEMS_DEFS[self.holdingItem.name].image, self.holdingItem.x, self.holdingItem.y, nil, self.holdingItem.scale)
     end
 end
 

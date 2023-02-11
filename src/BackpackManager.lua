@@ -43,10 +43,12 @@ function BackpackManager:update(dt)
  end
 
 function BackpackManager:checkIfThrowItem()
-    if love.keyboard.wasPressed('r') then
-        self:removeStackItems()
-    elseif love.keyboard.wasPressed('t') then
-        self:removeOneItem()
+    if self.keysPanel[self.chosen] ~= nil then 
+        if love.keyboard.wasPressed('r') then
+            self:removeStackItems()
+        elseif love.keyboard.wasPressed('t') then
+            self:removeOneItem()
+        end
     end
 end
 
@@ -55,23 +57,28 @@ function BackpackManager:removeStackItems()
     local itemNumber = self.content[itemName]
     self.content[itemName]  = nil
     table.remove(self.keysPanel, self.chosen)
-    local ix, iy = player:getDirBasedCoordinates({40, -80, -60, 60})
+    local ix, iy = self:getDirItemCoords()
     while itemNumber > 0 do
-        local delta = math.random(5, 30)
+        local delta = math.random(0, 5)
         gameMaps[activeMap].itemManager:addItem(itemName, ix+delta, iy+delta)
         itemNumber = itemNumber - 1
     end
 end
 
-function  BackpackManager:removeOneItem()
+function BackpackManager:removeOneItem()
     local itemName = self.keysPanel[self.chosen]
     if self.content[itemName] == 1 then
         self:removeStackItems()
     else
         self.content[itemName] = self.content[itemName] - 1
-        local ix, iy = player:getDirBasedCoordinates({40, -80, -60, 60})
+        local ix, iy = self:getDirItemCoords()
         gameMaps[activeMap].itemManager:addItem(itemName, ix, iy)
     end
+end
+
+function BackpackManager:getDirItemCoords()
+    local d, h, w = 10, player.height, player.width
+    return player:getDirBasedCoordinates({{w, h/2}, {-d, h/2}, {w/2-d/2, 0}, {w/2-d/2, h}})
 end
 
 function BackpackManager:render()
