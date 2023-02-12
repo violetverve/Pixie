@@ -30,7 +30,8 @@ gameMaps.valley = MapMaker('maps/valley.lua', {
     {'pineapple', 168, 296},
     {'potato', 270, 124}
     },
-    {{512, 106, 16, 16, mapTo = 'home', xy = {155, 300}}} --doors
+    {{512, 106, 16, 16, mapTo = 'home', xy = {155, 300}}}, 
+    true --doors
 )
 
 function love.load()
@@ -122,12 +123,6 @@ function table.contains(table, element)
     end
     return false
 end
-
--- function switchMaps(newMapName)
---     gameMaps[activeMap]:exit()
---     activeMap = newMapName
---     gameMaps[activeMap]:load()
--- end
 
 function cameraUpdate()
     local w = love.graphics.getWidth()/scale
