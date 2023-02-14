@@ -14,6 +14,8 @@ function BackpackManager:init(backpack)
 
     self.openBackpack = false
     self.keysBackpack = {}
+
+    self.taken = nil
 end
 
 function BackpackManager:update(dt)
@@ -28,19 +30,39 @@ function BackpackManager:update(dt)
     end
 
     for name, _ in pairs(self.content) do
-        --if #self.keysPanel < 10 then
-        --    if not table.contains(self.keysPanel, name) then
-        --        table.insert(self.keysPanel, name)
-        --    end
-        --if not table.contains(self.keysPanel, name) then
-        if not table.contains(self.keysBackpack, name) then
-            table.insert(self.keysBackpack, name)
+        if name ~= self.taken and not table.contains(self.keysBackpack, name) then
+            local firstnil = table.wherenil(self.keysBackpack)
+            if firstnil then
+                self.keysBackpack[firstnil] = name
+            else
+                table.insert(self.keysBackpack, name)
+            end
         end
-        --end
     end
     player:updateHoldingItem(self.keysBackpack[self.chosen])
     self:checkIfThrowItem()
+
+    self:checkForTaking()
  end
+
+function BackpackManager:render()
+    love.graphics.draw(BACKPACK_PANEL_IMG, WINDOW_WIDTH/2 - BACKPACK_PANEL_IMG:getWidth()/2, WINDOW_HEIGHT - BACKPACK_PANEL_IMG:getHeight())
+    self:drawItemsOnPanel(WINDOW_HEIGHT - BACKPACK_PANEL_IMG:getHeight())
+
+    if self.openBackpack then
+        self:drawOpenedBackpack()
+        if self.taken then
+            self:drawTakenItem()
+        end
+    end
+
+    --if love.mouse.isDown(1) then
+    --    love.graphics.print('mouse: '.. tostring(self.mouse_test[1]) .. tostring(self.mouse_test[2]), 0, 150)
+    --end
+end
+
+
+
 
 function BackpackManager:checkIfThrowItem()
     if self.keysBackpack[self.chosen] ~= nil then
@@ -56,7 +78,7 @@ function BackpackManager:removeStackItems()
     local itemName = self.keysBackpack[self.chosen]
     local itemNumber = self.content[itemName]
     self.content[itemName]  = nil
-    table.remove(self.keysBackpack, self.chosen)
+    self.keysBackpack[self.chosen] = nil
     local ix, iy = self:getDirItemCoords()
     while itemNumber > 0 do
         local delta = math.random(0, 5)
@@ -81,24 +103,41 @@ function BackpackManager:getDirItemCoords()
     return player:getDirBasedCoordinates({{w, h/2}, {-d, h/2}, {w/2-d/2, 0}, {w/2-d/2, h}})
 end
 
-function BackpackManager:render()
-    --love.graphics.setColor(132/255, 24/255 ,28/255)
-    --love.graphics.rectangle('fill', (WINDOW_WIDTH / 2) - (CELL_WIDTH + 8) * 4 - 8, WINDOW_HEIGHT - CELL_WIDTH - 8, (CELL_WIDTH + 8) * 8 + 8, CELL_WIDTH + 16)
-    --love.graphics.setColor(1, 1, 1)
-    --
-    --for i = 1, 8 do
-    --    if i == self.chosen then
-    --        love.graphics.setColor(225/255, 162/255, 104/255)
-    --    end
-    --    love.graphics.rectangle('fill', (WINDOW_WIDTH / 2) - (CELL_WIDTH + 8) * (4 - i + 1), WINDOW_HEIGHT - CELL_WIDTH, CELL_WIDTH, CELL_WIDTH)
-    --    love.graphics.setColor(1, 1, 1)
-    --end
-
-    love.graphics.draw(BACKPACK_PANEL_IMG, WINDOW_WIDTH/2 - BACKPACK_PANEL_IMG:getWidth()/2, WINDOW_HEIGHT - BACKPACK_PANEL_IMG:getHeight())
-    self:drawItemsOnPanel(WINDOW_HEIGHT - BACKPACK_PANEL_IMG:getHeight())
-
+function BackpackManager:checkForTaking()
     if self.openBackpack then
-        self:drawOpenedBackpack()
+        if not self.taken then
+            if love.mouse.buttonsPressed[1] then
+                local x = love.mouse.buttonsPressed[1][1]
+                local y = love.mouse.buttonsPressed[1][2]
+                --take item
+                self.fromCell = self:getMouseCell(x, y)
+                if self.keysBackpack[self.fromCell] then
+                    self.taken = self.keysBackpack[self.fromCell]
+                    self.keysBackpack[self.fromCell] = nil
+                end
+            end
+        else
+            if love.mouse.buttonsPressed[1] then
+                local x = love.mouse.buttonsPressed[1][1]
+                local y = love.mouse.buttonsPressed[1][2]
+                self.toCell = self:getMouseCell(x, y)
+
+                if self.toCell ~= 0 then
+                    --put item
+                    if self.keysBackpack[self.toCell] then
+                        self.keysBackpack[self.fromCell] = self.keysBackpack[self.toCell]
+                    else
+                        self.keysBackpack[self.fromCell] = nil
+                    end
+                    self.keysBackpack[self.toCell] = self.taken
+
+                    --delete all
+                    self.taken = nil
+                    self.toCell = nil
+                    self.fromCell = nil
+                end
+            end
+        end
     end
 end
 
@@ -144,7 +183,7 @@ function BackpackManager:drawOpenedBackpack()
     --draw frame on chosen item
     love.graphics.draw(BACKPACK_CHOSEN_IMG, (WINDOW_WIDTH / 2) - CELL_WIDTH * (6 - self.chosen) - 5, WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight()/2 + 4)
 
-    local mouseCellNow = self:getMouseCell()
+    local mouseCellNow = self:getMouseCell(mouseX, mouseY)
     local addScale = 0
     local onScaleDiff = 0
 
@@ -181,15 +220,18 @@ function BackpackManager:drawOpenedBackpack()
     end
 end
 
-function BackpackManager:getMouseCell()
-    local relativeX = mouseX - WINDOW_WIDTH / 2 + BACKPACK_IMG:getWidth() / 2 - 7
-    local relativeY = mouseY - WINDOW_HEIGHT / 2 + BACKPACK_IMG:getHeight() / 2 - 7
+function BackpackManager:drawTakenItem()
+    love.graphics.draw(ITEMS_DEFS[self.taken].image, mouseX - CELL_WIDTH/4, mouseY - CELL_HEIGHT/4, nil, 2)
+end
+function BackpackManager:getMouseCell(x, y)
+    local relativeX = x - WINDOW_WIDTH / 2 + BACKPACK_IMG:getWidth() / 2 - 7
+    local relativeY = y - WINDOW_HEIGHT / 2 + BACKPACK_IMG:getHeight() / 2 - 7
 
     local cellX = math.ceil(relativeX/CELL_WIDTH)
     local cellY = math.ceil(relativeY/CELL_HEIGHT)
 
-    love.graphics.print('mouseGridX: '.. cellX .. ' mouseGridY: '.. cellY, 0, 50)
-    love.graphics.print('mouseGrid: '.. (cellY - 1)*10 + cellX, 0, 100)
+    --love.graphics.print('mouseGridX: '.. cellX .. ' mouseGridY: '.. cellY, 0, 50)
+    --love.graphics.print('mouseGrid: '.. (cellY - 1)*10 + cellX, 0, 100)
 
-    return (1 <= cellX and cellX <= 10) and (cellY - 1)*10 + cellX or 0
+    return (1 <= cellX and cellX <= 10 and 1 <= cellY and cellY <= 4) and (cellY - 1)*10 + cellX or 0
 end

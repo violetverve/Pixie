@@ -55,6 +55,7 @@ function love.load()
 
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
+    love.mouse.buttonsReleased = {}
 end
 
 function love.update(dt)
@@ -80,6 +81,7 @@ function love.update(dt)
 
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
+    love.mouse.buttonsReleased = {}
 end
 
 function love.draw()
@@ -92,7 +94,7 @@ function love.draw()
         --world:draw()
     cam:detach()
 
-    love.graphics.print('dx: '.. mouseX/4 .. ' dy: '.. mouseY/4, 0, 0)
+    --love.graphics.print('dx: '.. mouseX .. ' dy: '.. mouseY, 0, 0)
     playerBackpack:render()
 end
 
@@ -113,6 +115,14 @@ function love.keypressed(key)
     end
 end
 
+function love.mousepressed(x, y, button, _, _)
+    love.mouse.buttonsPressed[button] = { x, y}
+end
+
+function love.mousereleased(x, y, button)
+    love.mouse.buttonsReleased[button] = { x, y}
+end
+
 function table.contains(table, element)
     for _, value in pairs(table) do
         if value == element then
@@ -120,6 +130,19 @@ function table.contains(table, element)
         end
     end
     return false
+end
+
+function table.wherenil(table)
+    local i = 1
+    local wherenil = nil
+    for _, value in pairs(table) do
+        if value == nil then
+            wherenil = i
+            break
+        end
+        i = i + 1
+    end
+    return wherenil
 end
 
 function cameraUpdate()
