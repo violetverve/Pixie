@@ -58,6 +58,7 @@ function love.load()
 end
 
 function love.update(dt)
+    mouseX, mouseY = love.mouse.getPosition( )
     --gameTimer = gameTimer + dt*1000
     --if  gameTimer > 1000 then
     --    mapNum = 1
@@ -83,23 +84,20 @@ end
 
 function love.draw()
     cam:attach()
-        -- gameMap:draw()
-    --if mapNum == 1 then
-    --    gameMap:drawLayer(gameMap.layers['ground'])
-    --    gameMap:drawLayer(gameMap.layers['home'])
-    --else
-    --    gameMap2:drawLayer(gameMap2.layers['Tile Layer 1'])
-    --    gameMap2:drawLayer(gameMap2.layers['Furniture'])
-    --    gameMap2:drawLayer(gameMap2.layers['Decoration'])
-    --end
+
+    --    gameMaps[activeMap].gameMap:draw(-cam.x/2, -cam.y/2, 4, 4)
         gameMaps[activeMap]:drawBeforePlayer()
         player:render()
         gameMaps[activeMap]:drawAfterPlayer()
-        world:draw()
+        --world:draw()
     cam:detach()
 
+    love.graphics.print('dx: '.. mouseX/4 .. ' dy: '.. mouseY/4, 0, 0)
     playerBackpack:render()
 end
+
+
+
 
 
 function love.keyboard.wasPressed(key)
