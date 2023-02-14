@@ -26,6 +26,11 @@ function BackpackManager:update(dt)
         self.chosen = self.chosen > 9 and 1 or self.chosen + 1
     end
     if love.keyboard.wasPressed('b') then
+        if self.openBackpack then
+            self.keysBackpack[self.fromCell] = self.taken
+            self.taken = nil
+            self.fromCell = nil
+        end
         self.openBackpack = not self.openBackpack
     end
 
