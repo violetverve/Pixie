@@ -133,14 +133,12 @@ function table.contains(table, element)
 end
 
 function table.wherenil(table)
-    local i = 1
     local wherenil = nil
-    for _, value in pairs(table) do
+    for key, value in pairs(table) do
         if value == nil then
-            wherenil = i
+            wherenil = key
             break
         end
-        i = i + 1
     end
     return wherenil
 end
