@@ -53,8 +53,8 @@ function BackpackManager:update(dt)
  end
 
 function BackpackManager:render()
-    love.graphics.draw(BACKPACK_PANEL_IMG, WINDOW_WIDTH/2 - BACKPACK_PANEL_IMG:getWidth()/2, WINDOW_HEIGHT - BACKPACK_PANEL_IMG:getHeight())
-    self:drawItemsOnPanel(WINDOW_HEIGHT - BACKPACK_PANEL_IMG:getHeight())
+    love.graphics.draw(BACKPACK_PANEL_IMG, love.graphics.getWidth()/2 - BACKPACK_PANEL_IMG:getWidth()/2, love.graphics.getHeight() - BACKPACK_PANEL_IMG:getHeight())
+    self:drawItemsOnPanel(love.graphics.getHeight() - BACKPACK_PANEL_IMG:getHeight())
 
     if self.openBackpack then
         self:drawOpenedBackpack()
@@ -166,14 +166,14 @@ function BackpackManager:drawItemsOnPanel(y)
 
             --draw item image
             love.graphics.draw(ITEMS_DEFS[name].image,
-                    (WINDOW_WIDTH / 2) - CELL_WIDTH * (6 - i) + 8 - onScaleDiff,
+                    (love.graphics.getWidth() / 2) - CELL_WIDTH * (6 - i) + 8 - onScaleDiff,
                     y + 12 - onScaleDiff, nil, 2 + addScale)
 
             --print item count
             if self.content[name] > 1 then
                 love.graphics.setColor(67/255, 48/255, 31/255)
                 love.graphics.printf(tostring(self.content[name]),
-                        (WINDOW_WIDTH / 2) - CELL_WIDTH * (6 - i) + CELL_WIDTH - 16,
+                        (love.graphics.getWidth() / 2) - CELL_WIDTH * (6 - i) + CELL_WIDTH - 16,
                         y + BACKPACK_PANEL_IMG:getHeight() - 24, 18)
                 love.graphics.setColor(1, 1, 1)
             end
@@ -181,14 +181,14 @@ function BackpackManager:drawItemsOnPanel(y)
     end
 
     --draw frame on chosen item
-    love.graphics.draw(BACKPACK_CHOSEN_IMG, (WINDOW_WIDTH / 2) - CELL_WIDTH * (6 - self.chosen) - 5, y + 4)
+    love.graphics.draw(BACKPACK_CHOSEN_IMG, (love.graphics.getWidth() / 2) - CELL_WIDTH * (6 - self.chosen) - 5, y + 4)
 end
 
 function BackpackManager:drawOpenedBackpack()
-    love.graphics.draw(BACKPACK_IMG, WINDOW_WIDTH / 2 - BACKPACK_IMG:getWidth() / 2, WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight() / 2)
+    love.graphics.draw(BACKPACK_IMG, love.graphics.getWidth() / 2 - BACKPACK_IMG:getWidth() / 2, love.graphics.getHeight() / 2 - BACKPACK_IMG:getHeight() / 2)
     --self:drawItemsOnPanel(WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight()/2)
     --draw frame on chosen item
-    love.graphics.draw(BACKPACK_CHOSEN_IMG, (WINDOW_WIDTH / 2) - CELL_WIDTH * (6 - self.chosen) - 5, WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight()/2 + 4)
+    love.graphics.draw(BACKPACK_CHOSEN_IMG, (love.graphics.getWidth() / 2) - CELL_WIDTH * (6 - self.chosen) - 5, love.graphics.getHeight() / 2 - BACKPACK_IMG:getHeight()/2 + 4)
 
     local mouseCellNow = self:getMouseCell(mouseX, mouseY)
     local addScale = 0
@@ -211,15 +211,15 @@ function BackpackManager:drawOpenedBackpack()
 
                 --print item image
                 love.graphics.draw(ITEMS_DEFS[name].image,
-                WINDOW_WIDTH / 2 - BACKPACK_IMG:getWidth() / 2 + (i-1) * CELL_WIDTH + 14 - onScaleDiff,
-                WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight() / 2 + (j) * CELL_HEIGHT + 14 - onScaleDiff, nil, 2 + addScale)
+                love.graphics.getWidth() / 2 - BACKPACK_IMG:getWidth() / 2 + (i-1) * CELL_WIDTH + 14 - onScaleDiff,
+                love.graphics.getHeight() / 2 - BACKPACK_IMG:getHeight() / 2 + (j) * CELL_HEIGHT + 14 - onScaleDiff, nil, 2 + addScale)
 
                 --draw item count
                 if self.content[name] > 1 then
                 love.graphics.setColor(67/255, 48/255, 31/255)
                 love.graphics.printf(tostring(self.content[name]),
-                        (WINDOW_WIDTH / 2) - CELL_WIDTH * (6 - i) + CELL_WIDTH - 16,
-                        WINDOW_HEIGHT / 2 - BACKPACK_IMG:getHeight()/2 + (j) * CELL_HEIGHT + BACKPACK_PANEL_IMG:getHeight() - 24, 18)
+                        (love.graphics.getWidth() / 2) - CELL_WIDTH * (6 - i) + CELL_WIDTH - 16,
+                        love.graphics.getHeight() / 2 - BACKPACK_IMG:getHeight()/2 + (j) * CELL_HEIGHT + BACKPACK_PANEL_IMG:getHeight() - 24, 18)
                 love.graphics.setColor(1, 1, 1)
             end
             end 
@@ -231,8 +231,8 @@ function BackpackManager:drawTakenItem()
     love.graphics.draw(ITEMS_DEFS[self.taken].image, mouseX - CELL_WIDTH/4, mouseY - CELL_HEIGHT/4, nil, 2)
 end
 function BackpackManager:getMouseCell(x, y)
-    local relativeX = x - WINDOW_WIDTH / 2 + BACKPACK_IMG:getWidth() / 2 - 7
-    local relativeY = y - WINDOW_HEIGHT / 2 + BACKPACK_IMG:getHeight() / 2 - 7
+    local relativeX = x - love.graphics.getWidth() / 2 + BACKPACK_IMG:getWidth() / 2 - 7
+    local relativeY = y - love.graphics.getHeight() / 2 + BACKPACK_IMG:getHeight() / 2 - 7
 
     local cellX = math.ceil(relativeX/CELL_WIDTH)
     local cellY = math.ceil(relativeY/CELL_HEIGHT)
