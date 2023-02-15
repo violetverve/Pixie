@@ -167,7 +167,7 @@ function BackpackManager:drawItemsOnPanel(y)
             --draw item image
             love.graphics.draw(ITEMS_DEFS[name].image,
                     (love.graphics.getWidth() / 2) - CELL_WIDTH * (6 - i) + 8 - onScaleDiff,
-                    y + 12 - onScaleDiff, nil, 2 + addScale)
+                    y + 14 - onScaleDiff, nil, 2 + addScale)
 
             --print item count
             if self.content[name] > 1 then
