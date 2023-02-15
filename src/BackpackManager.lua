@@ -7,6 +7,8 @@ BACKPACK_PANEL_IMG = love.graphics.newImage('images/backpack-panel.png')
 BACKPACK_CHOSEN_IMG = love.graphics.newImage('images/backpack-chosen.png')
 BACKPACK_IN_ROW = 10
 
+BACKPACK_CAPACITY = 40
+
 function BackpackManager:init(backpack)
     self.content = backpack
     self.chosen = 1
@@ -36,11 +38,11 @@ function BackpackManager:update(dt)
 
     for name, _ in pairs(self.content) do
         if name ~= self.taken and not table.contains(self.keysBackpack, name) then
-            local firstnil = table.wherenil(self.keysBackpack)
+            local firstnil = self:findNilInBackPack()
             if firstnil then
                 self.keysBackpack[firstnil] = name
             else
-                table.insert(self.keysBackpack, name)
+                love.graphics.print("Backpack riches the limit", WINDOW_WIDTH/2 - BACKPACK_PANEL_IMG:getWidth()/2, WINDOW_HEIGHT - BACKPACK_PANEL_IMG:getHeight() - 12)
             end
         end
     end
@@ -239,4 +241,15 @@ function BackpackManager:getMouseCell(x, y)
     --love.graphics.print('mouseGrid: '.. (cellY - 1)*10 + cellX, 0, 100)
 
     return (1 <= cellX and cellX <= 10 and 1 <= cellY and cellY <= 4) and (cellY - 1)*10 + cellX or 0
+end
+
+function BackpackManager:findNilInBackPack()
+    local wherenil = nil
+    for i = 1, BACKPACK_CAPACITY do
+        if not self.keysBackpack[i] then
+            wherenil = i
+            break
+        end
+    end
+    return wherenil
 end

@@ -132,17 +132,6 @@ function table.contains(table, element)
     return false
 end
 
-function table.wherenil(table)
-    local wherenil = nil
-    for key, value in pairs(table) do
-        if value == nil then
-            wherenil = key
-            break
-        end
-    end
-    return wherenil
-end
-
 function cameraUpdate()
     local w = love.graphics.getWidth()/scale
     local h = love.graphics.getHeight()/scale
