@@ -2,6 +2,22 @@
 
 Pixie Game is a 2D RPG developed using the Love2D framework and Lua programming language. Drawing inspiration from classics like "The Legend of Zelda" and the charming farming simulator "Stardew Valley," Pixie Game embarks on a journey to capture the essence of adventure, exploration, and community building in a whimsical 2D world.
 
+## How to Run
+
+1. **Download and Install Love2D:**
+   - Download and install Love2D from the [official website](https://love2d.org/).
+
+2. **Clone the Repository:**
+   - Open your terminal or command prompt.
+   - Navigate to the directory where you want to clone the project.
+   - Run the following command:
+     ```bash
+     git clone https://github.com/violetverve/Pixie
+     ```
+3. **Run the Game:**
+   - The easiest way to run the game is to drag the folder onto either `love.exe` or a shortcut to `love.exe`. Remember to drag the folder containing `main.lua`, and not `main.lua`.
+   - Other methods are described on the [Love2D wiki](https://love2d.org/wiki/Getting_Started).
+   
 ## What is Implemented
 
 During a relatively short development period, the team successfully implemented essential features for Pixie Game:
@@ -23,5 +39,13 @@ During a relatively short development period, the team successfully implemented 
 - **camera:** Camera system implementation for dynamic player views.
 - **sti:** Handles Tiled map files for easy map creation and updates.
 - **vector (hump):** Provides vector operations for movement and positioning.
+
+
+## Acknowledgments
+
+- Tutorials on Love2D, Lua by [Challacade](https://www.youtube.com/@Challacade)
+- CS50’s Introduction to Game Development [Course](https://pll.harvard.edu/course/cs50s-introduction-game-development)
+- Zelda-like tilesets and sprites by [ArMM1998](https://opengameart.org/content/zelda-like-tilesets-and-sprites)
+- Food assets by [ARoachIFoundOnMyPillow](https://opengameart.org/content/16x16-food)
 
 
