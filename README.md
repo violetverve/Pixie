@@ -2,6 +2,8 @@
 
 Pixie Game is a 2D RPG developed using the Love2D framework and Lua programming language. Drawing inspiration from classics like "The Legend of Zelda" and the charming farming simulator "Stardew Valley," Pixie Game embarks on a journey to capture the essence of adventure, exploration, and community building in a whimsical 2D world.
 
+![image](https://github.com/violetverve/Pixie/assets/92580927/4cda04b8-d0b5-4d30-94af-c61f815fa628)
+
 ## How to Run
 
 1. **Download and Install Love2D:**
@@ -30,6 +32,17 @@ During a relatively short development period, the team successfully implemented 
 - **Day-Night Shift with Shaders:** Achieved a transition between day and night with shader effects.
 - **Colliders with Objects:** Enhanced environmental interaction with colliders on objects based on their position and height on the map.
 - **Map Switching System:** Implemented a system for switching between different maps, offering diverse and expansive gameplay.
+
+![image](https://github.com/violetverve/Pixie/assets/92580927/93644b6c-856c-41bb-9865-b2a39a7c460d)
+![image](https://github.com/violetverve/Pixie/assets/92580927/3345fcae-ab94-4028-97cb-00916f979117)
+![image](https://github.com/violetverve/Pixie/assets/92580927/20799ba9-cccf-4baf-acaa-8887a32f0802)
+
+![image](https://github.com/violetverve/Pixie/assets/92580927/1505a8f0-0964-4123-9555-a062411cbadc)
+![image](https://github.com/violetverve/Pixie/assets/92580927/efa2b579-6948-49a8-a3c5-b31c991cd229)
+
+
+
+
 
 ## Libraries
 - **push:** Resolution-handling for consistent visuals across different screens.
